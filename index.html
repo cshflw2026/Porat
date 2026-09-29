@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="hr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1e3a"><link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png"><title>eMariner+</title>
+<style>
+:root{--bg:#0e1726;--card:#1a2638;--ln:#2a3a52;--tx:#e8eef7;--mu:#8fa3bf;--ac:#3b8de0;--red:#d9604a;--yel:#e6c95a;--grn:#4caf7d}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font:15px system-ui,sans-serif;overscroll-behavior:none}
+#app{display:flex;flex-direction:column;height:100%;padding-top:env(safe-area-inset-top)}
+header{background:linear-gradient(#123a6b,#0b1e3a);padding:14px 16px;font-size:18px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+#v{flex:1;overflow-y:auto;padding:0 0 90px}
+nav{display:flex;overflow-x:auto;background:#0b1e3a;border-top:1px solid var(--ln);padding-bottom:env(safe-area-inset-bottom);scrollbar-width:none}
+nav button{flex:0 0 20%;background:none;border:0;color:var(--mu);padding:8px 0;font-size:10px}
+nav button b{display:block;font-size:20px;font-weight:400}nav .on{color:#fff;background:#163a68}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--ln);background:var(--card)}
+.row small{color:var(--mu);display:block;font-size:12px}.row .r{text-align:right;font-weight:600;white-space:nowrap}
+.h{padding:8px 16px;color:var(--yel);font-size:12px;letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between;background:var(--bg)}
+.red{background:var(--red);color:#fff}.yel{background:var(--yel);color:#222}.red small,.yel small{color:inherit;opacity:.8}
+.fab{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;background:var(--ac);color:#fff;border:0;font-size:30px;box-shadow:0 3px 10px #0008}
+button.x{background:none;border:0;color:var(--mu);font-size:18px;padding:4px 8px}
+input,textarea,select{width:100%;background:#0e1726;color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:10px;font:inherit;margin-top:4px}
+input[type=checkbox]{width:20px;height:20px;margin:0}
+dialog{background:var(--card);color:var(--tx);border:1px solid var(--ln);border-radius:14px;width:92%;max-width:440px;max-height:88%;overflow:auto}
+dialog::backdrop{background:#000a}dialog label{display:block;margin:8px 0;color:var(--mu);font-size:12px}
+dialog .r{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+dialog button,.btn{background:#22324a;color:var(--tx);border:0;border-radius:8px;padding:10px 14px;font:inherit}#sv{background:var(--ac)}#dl{background:var(--red);margin-right:auto}
+.add{display:flex;padding:8px 16px;background:#22324a;gap:6px}.add input{margin:0}
+.banner{padding:10px 16px;background:#5a3a12;color:#ffd98a}.pad{padding:12px 16px}.done{text-decoration:line-through;opacity:.5}
+.cv{background:#fff;color:#111;margin:12px;padding:16px;border-radius:8px;line-height:1.4}.cv h2{margin:0 0 4px}.cv h4{margin:14px 0 4px;border-bottom:1px solid #999;color:#123a6b}
+@media print{header,nav,.fab,.np{display:none!important}html,body,#app,#v{height:auto;overflow:visible;background:#fff}.cv{margin:0}}
+</style></head><body><div id="app"><header><span id="ttl"></span><span id="hx"></span></header><div id="v"></div><nav id="nv"></nav></div>
+<dialog id="dlg"></dialog><input type="file" id="fi" accept=".json" hidden>
+<datalist id="dc"></datalist><datalist id="ds"></datalist><datalist id="dt"></datalist><datalist id="dr"></datalist>
+<script>
+const $=s=>document.querySelector(s),D=864e5,esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let S=JSON.parse(localStorage.getItem('em')||'null')||{pack:[{c:'Dokumenti',i:[{t:'Putovnica',d:0},{t:'Pomorska knjižica',d:0}]},{c:'Elektronika',i:[{t:'Punjač i powerbank',d:0}]}],sea:[],certs:[],docs:[],cv:{},edu:[],log:[],debts:[],cur:'EUR',tab:'sea',yr:'all',mx:{}};
+const save=()=>localStorage.setItem('em',JSON.stringify(S)),td=new Date().toLocaleDateString('sv'),T=Date.parse(td),pd=s=>Date.parse(s),
+fd=s=>s?s.split('-').reverse().join('.'):'',n2=x=>(+x||0).toLocaleString('hr',{maximumFractionDigits:2}),
+seaEnd=c=>c.to?pd(c.to):T,cd=c=>Math.max(0,(seaEnd(c)-pd(c.from))/D+1),
+ov=(c,a,b)=>{const s=Math.max(pd(c.from),a),e=Math.min(seaEnd(c),b);return e>=s?(e-s)/D+1:0},
+yrs=d=>(d/365.25).toFixed(1),srt=(a,k,r)=>[...a].sort((x,y)=>(r?-1:1)*String(x[k]).localeCompare(String(y[k])));
+function form(t,fs,v={},ok,del){const d=$('#dlg');d.innerHTML=`<form method=dialog><h3>${t}</h3>${fs.map(f=>`<label>${f.l}${f.t=='area'?`<textarea name=${f.k} rows=6>${esc(v[f.k])}</textarea>`:`<input name=${f.k} type=${f.t||'text'} ${f.t=='number'?'step=any inputmode=decimal':''} value="${esc(v[f.k])}" ${f.ls?`list=${f.ls}`:''}>`}</label>`).join('')}<div class=r>${del?'<button type=button id=dl>Obriši</button>':''}<button value=c>Odustani</button><button id=sv value=s>Spremi</button></div></form>`;d.showModal();
+$('#sv').onclick=()=>{const o={};new FormData(d.querySelector('form')).forEach((x,k)=>o[k]=x);ok(o);save();R()};if(del)$('#dl').onclick=()=>{if(confirm('Obrisati?')){del();save();d.close();R()}}}
+const list=(k,arr,row,fs,extra)=>arr.map(x=>`<div class="row ${extra?extra(x):''}" onclick="ed('${k}',${S[k].indexOf(x)})">${row(x)}</div>`).join('')||'<div class=pad style="color:var(--mu)">Nema unosa. Dodaj s +</div>';
+const F={sea:[{k:'co',l:'Kompanija',ls:'dc'},{k:'ship',l:'Brod / platforma',ls:'ds'},{k:'type',l:'Tip plovila',ls:'dt'},{k:'rank',l:'Dužnost',ls:'dr'},{k:'from',l:'Ukrcaj',t:'date'},{k:'to',l:'Iskrcaj (prazno = još na brodu)',t:'date'},{k:'rate',l:'Dnevnica ('+S.cur+')',t:'number'}],
+certs:[{k:'n',l:'Naziv'},{k:'no',l:'Broj / bilješka'},{k:'exp',l:'Vrijedi do',t:'date'}],docs:[{k:'n',l:'Naziv'},{k:'no',l:'Broj / bilješka'},{k:'exp',l:'Vrijedi do',t:'date'}],
+debts:[{k:'who',l:'Osoba'},{k:'amt',l:'Iznos (+ duguju meni, − dugujem ja)',t:'number'},{k:'note',l:'Bilješka'}],edu:[{k:'n',l:'Škola / fakultet'},{k:'lv',l:'Razina'},{k:'a',l:'Od (god.)'},{k:'b',l:'Do (god.)'}]};
+function ed(k,i){const nw=i<0,v=nw?{}:S[k][i];form(nw?'Novo':'Uredi',F[k],v,o=>{if(nw){S[k].push(o);if(k=='sea'){S.log.push({d:o.from,t:'Ukrcaj: '+o.ship+' ('+o.co+')'});if(o.to)S.log.push({d:o.to,t:'Iskrcaj: '+o.ship})}}else S[k][i]={...v,...o}},nw?null:()=>S[k].splice(i,1))}
+const add=k=>ed(k,-1),exp=x=>x.exp?Math.round((pd(x.exp)-T)/D):null,cl=x=>{const e=exp(x);return e===null?'':e<0?'red':e<180?'yel':''};
+const V={
+pack:()=>S.pack.map((c,i)=>`<div class=h><span onclick="rn(${i})">${esc(c.c)}</span><button class=x onclick="if(confirm('Obrisati kategoriju?')){S.pack.splice(${i},1);save();R()}">✕</button></div><div class=add><input id=a${i} placeholder="Nova stavka" onkeydown="if(event.key=='Enter')ai(${i})"><button class=x onclick="ai(${i})">＋</button></div>`+c.i.map((x,j)=>`<div class=row><label style="display:flex;gap:12px;align-items:center;flex:1"><input type=checkbox ${x.d?'checked':''} onchange="S.pack[${i}].i[${j}].d^=1;save();R()"><span class="${x.d?'done':''}">${esc(x.t)}</span></label><button class=x onclick="S.pack[${i}].i.splice(${j},1);save();R()">✕</button></div>`).join('')).join('')+`<div class=pad><button class=btn onclick="nc()">＋ Kategorija</button> <button class=btn onclick="S.pack.forEach(c=>c.i.forEach(x=>x.d=0));save();R()">Očisti kvačice</button></div>`,
+sea:()=>list('sea',srt(S.sea,'from',1),c=>`<div>${esc(c.co)}<small>${esc(c.ship)} · ${esc(c.rank)}</small></div><div class=r><small>${fd(c.from)} – ${c.to?fd(c.to):'na brodu'}</small>${n2(cd(c))} dana</div>`)+'<button class=fab onclick="add(\'sea\')">+</button>',
+stat:()=>{if(!S.sea.length)return'<div class=pad>Prvo dodaj staž.</div>';const f=Math.min(...S.sea.map(c=>pd(c.from))),y0=new Date(f).getUTCFullYear(),y1=+td.slice(0,4),ys=[];for(let y=y0;y<=y1;y++)ys.push(y);
+const rg=y=>{let a=f,b=T;if(y!='all'){a=Math.max(f,pd(y+'-01-01'));b=Math.min(T,pd(y+'-12-31'))}const on=S.sea.reduce((s,c)=>s+ov(c,a,b),0),tot=Math.max(0,(b-a)/D+1);return{on,home:Math.max(0,tot-on),inc:S.sea.reduce((s,c)=>s+ov(c,a,b)*(+c.rate||0),0)}},r=rg(S.yr);
+return`<div class=pad><select onchange="S.yr=this.value;save();R()"><option value=all>Cijela karijera</option>${ys.map(y=>`<option ${S.yr==y?'selected':''}>${y}</option>`).join('')}</select></div><div class=h>Dani</div><div class=row>Na brodu<b>${n2(r.on)} (${yrs(r.on)} god.)</b></div><div class=row>Kod kuće<b>${n2(r.home)}</b></div><div class=h>Zarada</div><div class=row>Ukupno (${S.cur})<b>${n2(r.inc)}</b></div><div class=row>Prosjek po danu na brodu<b>${r.on?n2(r.inc/r.on):0}</b></div><div class=h>Po godinama</div>`+ys.map(y=>{const q=rg(y);return`<div class=row><span>${y}</span><span>${n2(q.on)} d · ${n2(q.inc)} ${S.cur}</span></div>`}).join('')},
+mat:()=>{const L=S.sea.length?srt(S.sea,'from',1)[0]:{},m={t:S.mx.t??L.type,c:S.mx.c??L.co,r:S.mx.r??L.rank},u=k=>[...new Set(S.sea.map(c=>c[k]).filter(Boolean))],
+sel=(k,key,l)=>`<label class=pad style="display:block;color:var(--mu)">${l}<select onchange="S.mx.${key}=this.value;save();R()">${u(k).map(o=>`<option ${o==m[key]?'selected':''}>${esc(o)}</option>`).join('')}</select></label>`,
+by=(k,v)=>S.sea.filter(c=>c[k]==v),days=a=>a.reduce((s,c)=>s+cd(c),0),span=a=>a.length?(Math.max(...a.map(seaEnd))-Math.min(...a.map(c=>pd(c.from))))/D+1:0,C=by('co',m.c),Tp=by('type',m.t),Rk=by('rank',m.r);
+return sel('type','t','Tip plovila')+sel('co','c','Kompanija')+sel('rank','r','Dužnost')+`<div class=h>Rezultat (godine)</div><div class=row><span>Kod operatera<small>samo staž</small></span><b>${yrs(days(C))}</b></div><div class=row><span>Kod operatera<small>uključujući dopust</small></span><b>${yrs(span(C))}</b></div><div class=row><span>U činu<small>samo staž</small></span><b>${yrs(days(Rk))}</b></div><div class=row><span>Na tipu plovila<small>samo staž</small></span><b>${yrs(days(Tp))}</b></div><div class=row><span>Na tipu plovila<small>uključujući dopust</small></span><b>${yrs(span(Tp))}</b></div>`},
+certs:()=>bn('certs')+list('certs',srt(S.certs,'exp'),x=>`<div>${esc(x.n)}<small>${esc(x.no)}</small></div><div class=r>${fd(x.exp)}<small>${exl(x)}</small></div>`,0,cl)+'<button class=fab onclick="add(\'certs\')">+</button>',
+docs:()=>bn('docs')+list('docs',srt(S.docs,'exp'),x=>`<div>${esc(x.n)}<small>${esc(x.no)}</small></div><div class=r>${fd(x.exp)}<small>${exl(x)}</small></div>`,0,cl)+'<button class=fab onclick="add(\'docs\')">+</button>',
+cv:()=>{const c=S.cv,ex=srt(S.sea,'from',1);return`<div class="pad np"><button class=btn onclick="ecv()">✎ Podaci</button> <button class=btn onclick="add('edu')">＋ Školovanje</button> <button class=btn onclick="print()">PDF / Ispis</button> <button class=btn onclick="shr()">Podijeli</button></div><div class=cv><h2>${esc(c.name)}</h2>${esc(c.addr)}<br>${esc(c.phone)} · ${esc(c.email)}${c.cover?`<h4>Uvodno pismo</h4><div style="white-space:pre-wrap">${esc(c.cover)}</div>`:''}<h4>Obrazovanje</h4>${S.edu.map((e,i)=>`<div onclick="ed('edu',${i})"><b>${esc(e.n)}</b> ${esc(e.lv)} <span style="float:right">${esc(e.a)}–${esc(e.b)}</span></div>`).join('')}<h4>Iskustvo</h4>${ex.map(x=>`<div><b>${esc(x.rank)}</b>, ${esc(x.ship)} (${esc(x.type)})<span style="float:right">${fd(x.from)}–${x.to?fd(x.to):'danas'}</span><br><small>${esc(x.co)}</small></div>`).join('')}<h4>Certifikati</h4>${srt(S.certs,'n').map(x=>esc(x.n)+' ('+fd(x.exp)+')').join(', ')}</div>`},
+log:()=>`<div class=add><input id=lg placeholder="Novi događaj" onkeydown="if(event.key=='Enter')al()"><button class=x onclick="al()">＋</button></div>`+(S.log.length?srt(S.log,'d',1).map(x=>`<div class=row><div>${esc(x.t)}<small>${fd(x.d)}</small></div><button class=x onclick="S.log.splice(S.log.indexOf(S.log.find(y=>y===${JSON.stringify(x).replace(/"/g,"'")}))<0?0:0,0)">&nbsp;</button></div>`).join(''):'<div class=pad>Prazno</div>'),
+debt:()=>{const t=S.debts.reduce((s,x)=>s+(+x.amt||0),0);return`<div class=h>Saldo<span>${n2(t)} ${S.cur}</span></div>`+list('debts',S.debts,x=>`<div>${esc(x.who)}<small>${esc(x.note)}</small></div><div class=r style="color:${x.amt<0?'var(--red)':'var(--grn)'}">${n2(x.amt)}</div>`)+'<button class=fab onclick="add(\'debts\')">+</button>'},
+set:()=>`<div class=pad><label>Valuta<input value="${esc(S.cur)}" onchange="S.cur=this.value;save()"></label><p><button class=btn onclick="bk()">⬇ Izvezi sigurnosnu kopiju</button></p><p><button class=btn onclick="$('#fi').click()">⬆ Uvezi kopiju</button></p><p><button class=btn onclick="navigator.storage.persist().then(r=>alert(r?'Podaci zaštićeni':'Preglednik nije dao trajnu pohranu'))">Zaštiti podatke od brisanja</button></p><p style="color:var(--mu)">Podaci su samo na ovom uređaju. Redovito izvezi kopiju.</p></div>`};
+const bn=k=>{const a=S[k].filter(x=>exp(x)!==null&&exp(x)<180);return a.length?`<div class=banner>⚠ ${a.length} ističe/isteklo (unutar 180 dana)</div>`:''},exl=x=>{const e=exp(x);return e===null?'':e<0?'isteklo':e+' dana'};
+const N=[['sea','⚓','Staž'],['stat','📊','Statistika'],['certs','📜','Certifikati'],['docs','🗂','Dokumenti'],['pack','🎒','Popis'],['mat','▦','Matrica'],['cv','👤','CV'],['log','📖','Dnevnik'],['debt','💶','Dugovi'],['set','⚙','Postavke']];
+function R(){const u=k=>[...new Set(S.sea.map(c=>c[k]).filter(Boolean))].map(o=>`<option value="${esc(o)}">`).join('');$('#dc').innerHTML=u('co');$('#ds').innerHTML=u('ship');$('#dt').innerHTML=u('type');$('#dr').innerHTML=u('rank');
+const v=$('#v'),y=v.scrollTop;v.innerHTML=V[S.tab]();v.scrollTop=y;$('#ttl').textContent=N.find(n=>n[0]==S.tab)[2];
+$('#nv').innerHTML=N.map(n=>`<button class="${n[0]==S.tab?'on':''}" onclick="S.tab='${n[0]}';save();R()"><b>${n[1]}</b>${n[2]}</button>`).join('')}
+function ai(i){const e=$('#a'+i);if(e.value.trim()){S.pack[i].i.push({t:e.value.trim(),d:0});save();R();$('#a'+i).focus()}}
+function nc(){const n=prompt('Naziv kategorije');if(n){S.pack.push({c:n,i:[]});save();R()}}
+function rn(i){const n=prompt('Novi naziv',S.pack[i].c);if(n){S.pack[i].c=n;save();R()}}
+function al(){const e=$('#lg');if(e.value.trim()){S.log.push({d:td,t:e.value.trim()});save();R()}}
+function ecv(){form('Osobni podaci',[{k:'name',l:'Ime i prezime'},{k:'addr',l:'Adresa'},{k:'phone',l:'Telefon',t:'tel'},{k:'email',l:'E-mail',t:'email'},{k:'cover',l:'Uvodno pismo',t:'area'}],S.cv,o=>S.cv=o)}
+function shr(){const c=S.cv,t=[c.name,c.phone,c.email,'',c.cover,'',...srt(S.sea,'from',1).map(x=>`${x.rank}, ${x.ship}, ${x.co}: ${fd(x.from)}–${x.to?fd(x.to):'danas'}`)].join('\n');navigator.share?navigator.share({title:'CV',text:t}):navigator.clipboard.writeText(t).then(()=>alert('Kopirano'))}
+function bk(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='emariner-'+td+'.json';a.click()}
+$('#fi').onchange=e=>{const r=new FileReader();r.onload=()=>{try{S=JSON.parse(r.result);save();R();alert('Uvezeno')}catch{alert('Neispravna datoteka')}};r.readAsText(e.target.files[0])};
+// fix: Log delete uses index
+V.log=()=>`<div class=add><input id=lg placeholder="Novi događaj" onkeydown="if(event.key=='Enter')al()"><button class=x onclick="al()">＋</button></div>`+(S.log.length?S.log.map((x,i)=>[x,i]).sort((a,b)=>b[0].d.localeCompare(a[0].d)).map(([x,i])=>`<div class=row><div>${esc(x.t)}<small>${fd(x.d)}</small></div><button class=x onclick="S.log.splice(${i},1);save();R()">✕</button></div>`).join(''):'<div class=pad>Prazno</div>');
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
+R();
+</script></body></html>
