@@ -1,41 +1,42 @@
 <!DOCTYPE html>
 <html lang="hr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b1e3a"><link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#000000"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&display=swap"><link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png"><title>eMariner+</title>
 <style>
-:root{--bg:#0e1726;--card:#1a2638;--ln:#2a3a52;--tx:#e8eef7;--mu:#8fa3bf;--ac:#3b8de0;--red:#d9604a;--yel:#e6c95a;--grn:#4caf7d}
+:root{--bg:#000;--ln:#1a1a1a;--tx:#f2f2f2;--mu:#8a8a8a;--ac:#f5b94a;--red:#ff8a78;--yel:#f5b94a;--grn:#5ec98f}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font:15px system-ui,sans-serif;overscroll-behavior:none}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font:15px Sora,system-ui,sans-serif;overscroll-behavior:none}
 #app{display:flex;flex-direction:column;height:100%;padding-top:env(safe-area-inset-top)}
-header{background:linear-gradient(#123a6b,#0b1e3a);padding:14px 16px;font-size:18px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
-#v{flex:1;overflow-y:auto;padding:0 0 90px}
-nav{display:flex;overflow-x:auto;background:#0b1e3a;border-top:1px solid var(--ln);padding-bottom:env(safe-area-inset-bottom);scrollbar-width:none}
-nav button{flex:0 0 20%;background:none;border:0;color:var(--mu);padding:8px 0;font-size:10px}
-nav button b{display:block;font-size:20px;font-weight:400}nav .on{color:#fff;background:#163a68}
-.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--ln);background:var(--card)}
-.row small{color:var(--mu);display:block;font-size:12px}.row .r{text-align:right;font-weight:600;white-space:nowrap}
-.h{padding:8px 16px;color:var(--yel);font-size:12px;letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between;background:var(--bg)}
-.red{background:var(--red);color:#fff}.yel{background:var(--yel);color:#222}.red small,.yel small{color:inherit;opacity:.8}
-.fab{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;background:var(--ac);color:#fff;border:0;font-size:30px;box-shadow:0 3px 10px #0008}
-button.x{background:none;border:0;color:var(--mu);font-size:18px;padding:4px 8px}
-input,textarea,select{width:100%;background:#0e1726;color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:10px;font:inherit;margin-top:4px}
-input[type=checkbox]{width:20px;height:20px;margin:0}
-dialog{background:var(--card);color:var(--tx);border:1px solid var(--ln);border-radius:14px;width:92%;max-width:440px;max-height:88%;overflow:auto}
-dialog::backdrop{background:#000a}dialog label{display:block;margin:8px 0;color:var(--mu);font-size:12px}
-dialog .r{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
-dialog button,.btn{background:#22324a;color:var(--tx);border:0;border-radius:8px;padding:10px 14px;font:inherit}#sv{background:var(--ac)}#dl{background:var(--red);margin-right:auto}
-.add{display:flex;padding:8px 16px;background:#22324a;gap:6px}.add input{margin:0}
-.banner{padding:10px 16px;background:#5a3a12;color:#ffd98a}.pad{padding:12px 16px}.done{text-decoration:line-through;opacity:.5}
-.cv{background:#fff;color:#111;margin:12px;padding:16px;border-radius:8px;line-height:1.4}.cv h2{margin:0 0 4px}.cv h4{margin:14px 0 4px;border-bottom:1px solid #999;color:#123a6b}
+header{padding:20px 20px 8px;font-size:26px;font-weight:700;letter-spacing:-.02em;display:flex;justify-content:space-between}
+#v{flex:1;overflow-y:auto;padding:0 0 100px}
+nav{display:flex;overflow-x:auto;background:#000;border-top:1px solid var(--ln);padding-bottom:env(safe-area-inset-bottom);scrollbar-width:none}
+nav button{flex:0 0 22%;background:none;border:0;color:#777;padding:10px 0;font:600 11px Sora,system-ui,sans-serif;min-height:56px;display:flex;flex-direction:column;align-items:center;gap:4px}
+nav .on{color:var(--ac)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:16px 20px;border-bottom:1px solid var(--ln);min-height:56px}
+.row small{color:var(--mu);display:block;font-size:12px;margin-top:3px}.row .r{text-align:right;font-weight:600;white-space:nowrap}
+.h{padding:20px 20px 8px;color:var(--mu);font-size:12px;letter-spacing:.08em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+.red{background:#1c0d0b;color:var(--red)}.yel{background:#1c1608;color:var(--yel)}.red small,.yel small{color:inherit;opacity:.75}
+.fab{position:fixed;right:20px;bottom:calc(76px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:50%;background:var(--ac);color:#000;border:0;font-size:30px;box-shadow:0 4px 14px #000a}
+button.x{background:none;border:0;color:var(--mu);font-size:18px;padding:10px;min-width:44px;min-height:44px}
+input,textarea,select{width:100%;background:#0b0b0b;color:var(--tx);border:1px solid #2a2a2a;border-radius:12px;padding:12px;font:inherit;margin-top:4px;min-height:44px}
+input[type=checkbox]{width:22px;height:22px;min-height:0;margin:0;accent-color:var(--ac)}
+dialog{background:#0d0d0d;color:var(--tx);border:1px solid #2a2a2a;border-radius:20px;width:92%;max-width:440px;max-height:88%;overflow:auto}
+dialog::backdrop{background:#000c}dialog label{display:block;margin:10px 0;color:var(--mu);font-size:12px}
+dialog .r{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+dialog button,.btn{background:none;border:1px solid #333;color:var(--tx);border-radius:14px;padding:12px 16px;font:600 14px Sora,system-ui,sans-serif;min-height:44px}#sv{background:var(--ac);color:#000;border-color:var(--ac)}#dl{color:var(--red);margin-right:auto}
+.add{display:flex;padding:8px 20px;gap:6px;border-bottom:1px solid var(--ln)}.add input{margin:0}
+.banner{margin:8px 20px;padding:12px 14px;border:1px solid #3a2e12;background:#1c1608;color:var(--yel);border-radius:12px;font-size:13px}.pad{padding:12px 20px}.done{text-decoration:line-through;opacity:.5}
+.cv{background:#fff;color:#111;margin:12px;padding:16px;border-radius:12px;line-height:1.4}.cv h2{margin:0 0 4px}.cv h4{margin:14px 0 4px;border-bottom:1px solid #999;color:#123a6b}
+#ca::-webkit-scrollbar{display:none}
 @media print{header,nav,.fab,.np{display:none!important}html,body,#app,#v{height:auto;overflow:visible;background:#fff}.cv{margin:0}}
 </style></head><body><div id="app"><header><span id="ttl"></span><span id="hx"></span></header><div id="v"></div><nav id="nv"></nav></div>
 <dialog id="dlg"></dialog><input type="file" id="fi" accept=".json" hidden>
 <datalist id="dc"></datalist><datalist id="ds"></datalist><datalist id="dt"></datalist><datalist id="dr"></datalist>
 <script>
 const $=s=>document.querySelector(s),D=864e5,esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let S=JSON.parse(localStorage.getItem('em')||'null')||{pack:[{c:'Dokumenti',i:[{t:'Putovnica',d:0},{t:'Pomorska knjižica',d:0}]},{c:'Elektronika',i:[{t:'Punjač i powerbank',d:0}]}],sea:[],certs:[],docs:[],cv:{},edu:[],log:[],debts:[],cur:'EUR',tab:'sea',yr:'all',mx:{}};
-S.trv??=8;S.thr??=183;S.rot??=28;
+let S=JSON.parse(localStorage.getItem('em')||'null')||{pack:[{c:'Dokumenti',i:[{t:'Putovnica',d:0},{t:'Pomorska knjižica',d:0}]},{c:'Elektronika',i:[{t:'Punjač i powerbank',d:0}]}],sea:[],certs:[],docs:[],cv:{},edu:[],log:[],debts:[],cur:'EUR',tab:'home',yr:'all',mx:{}};
+S.tab='home';S.trv??=8;S.thr??=183;S.rot??=28;
 const save=()=>localStorage.setItem('em',JSON.stringify(S)),td=new Date().toLocaleDateString('sv'),T=Date.parse(td),pd=s=>Date.parse(s),
 fd=s=>s?s.split('-').reverse().join('.'):'',n2=x=>(+x||0).toLocaleString('hr',{maximumFractionDigits:2}),
 seaEnd=c=>c.to?pd(c.to):T,cd=c=>Math.max(0,(seaEnd(c)-pd(c.from))/D+1),
@@ -51,7 +52,7 @@ function ed(k,i){const nw=i<0,L=k=='sea'&&S.sea.length?srt(S.sea,'from',1)[0]:nu
 const add=k=>ed(k,-1),exp=x=>x.exp?Math.round((pd(x.exp)-T)/D):null,cl=x=>{const e=exp(x);return e===null?'':e<0?'red':e<180?'yel':''};
 const V={
 pack:()=>S.pack.map((c,i)=>`<div class=h><span onclick="rn(${i})">${esc(c.c)}</span><button class=x onclick="if(confirm('Obrisati kategoriju?')){S.pack.splice(${i},1);save();R()}">✕</button></div><div class=add><input id=a${i} placeholder="Nova stavka" onkeydown="if(event.key=='Enter')ai(${i})"><button class=x onclick="ai(${i})">＋</button></div>`+c.i.map((x,j)=>`<div class=row><label style="display:flex;gap:12px;align-items:center;flex:1"><input type=checkbox ${x.d?'checked':''} onchange="S.pack[${i}].i[${j}].d^=1;save();R()"><span class="${x.d?'done':''}">${esc(x.t)}</span></label><button class=x onclick="S.pack[${i}].i.splice(${j},1);save();R()">✕</button></div>`).join('')).join('')+`<div class=pad><button class=btn onclick="nc()">＋ Kategorija</button> <button class=btn onclick="S.pack.forEach(c=>c.i.forEach(x=>x.d=0));save();R()">Očisti kvačice</button></div>`,
-sea:()=>bkb()+nx()+list('sea',srt(S.sea,'from',1),c=>`<div>${esc(c.co)}<small>${esc(c.ship)} · ${esc(c.rank)}</small></div><div class=r><small>${fd(c.from)} – ${c.to?fd(c.to):'na brodu'}</small>${n2(cd(c)+S.trv)} dana<small>${n2(cd(c))}+${S.trv} put.${c.pay?' · '+n2(c.pay)+' '+S.cur:''}</small></div>`)+'<button class=fab onclick="add(\'sea\')">+</button>',
+sea:()=>bkb()+list('sea',srt(S.sea,'from',1),c=>`<div>${esc(c.co)}<small>${esc(c.ship)} · ${esc(c.rank)}</small></div><div class=r><small>${fd(c.from)} – ${c.to?fd(c.to):'na brodu'}</small>${n2(cd(c)+S.trv)} dana<small>${n2(cd(c))}+${S.trv} put.${c.pay?' · '+n2(c.pay)+' '+S.cur:''}</small></div>`)+'<button class=fab onclick="add(\'sea\')">+</button>',
 stat:()=>{if(!S.sea.length)return'<div class=pad>Prvo dodaj staž.</div>';const f=Math.min(...S.sea.map(c=>pd(c.from))),y0=new Date(f).getUTCFullYear(),y1=+td.slice(0,4),ys=[];for(let y=y0;y<=y1;y++)ys.push(y);
 const rg=y=>{let a=f,b=T;if(y!='all'){a=Math.max(f,pd(y+'-01-01'));b=Math.min(T,pd(y+'-12-31'))}const tvn=S.sea.filter(c=>seaEnd(c)>=a&&seaEnd(c)<=b).length,pt=S.sea.filter(c=>c.to&&pd(c.to)>=a&&pd(c.to)<=b),on=S.sea.reduce((s,c)=>s+ov(c,a,b),0),tot=Math.max(0,(b-a)/D+1);return{on,home:Math.max(0,tot-on),inc:pt.reduce((s,c)=>s+(+c.pay||0),0),pdays:pt.reduce((s,c)=>s+cd(c),0),tvn,tv:tvn*S.trv}},r=rg(S.yr);
 return`<div class=pad><select onchange="S.yr=this.value;save();R()"><option value=all>Cijela karijera</option>${ys.map(y=>`<option ${S.yr==y?'selected':''}>${y}</option>`).join('')}</select><button class=btn style="margin-top:8px" onclick="csv()">⬇ CSV za knjigovođu</button></div>${tx(r)}<div class=h>Dani</div><div class=row>Kod kuće<b>${n2(r.home)}</b></div><div class=h>Zarada</div><div class=row>Ukupno (${S.cur})<b>${n2(r.inc)}</b></div><div class=row><span>Prosjek po danu<small>plaća se broji u godini iskrcaja</small></span><b>${r.pdays?n2(r.inc/r.pdays):0}</b></div><div class=h>Po godinama</div>`+ys.map(y=>{const q=rg(y);return`<div class=row><span>${y}</span><span>${n2(q.on+q.tv)} d plov. · ${n2(q.inc)} ${S.cur}</span></div>`}).join('')},
@@ -66,10 +67,10 @@ log:()=>`<div class=add><input id=lg placeholder="Novi događaj" onkeydown="if(e
 debt:()=>{const t=S.debts.reduce((s,x)=>s+(+x.amt||0),0);return`<div class=h>Saldo<span>${n2(t)} ${S.cur}</span></div>`+list('debts',S.debts,x=>`<div>${esc(x.who)}<small>${esc(x.note)}</small></div><div class=r style="color:${x.amt<0?'var(--red)':'var(--grn)'}">${n2(x.amt)}</div>`)+'<button class=fab onclick="add(\'debts\')">+</button>'},
 set:()=>`<div class=pad><label>Valuta<input value="${esc(S.cur)}" onchange="S.cur=this.value;save()"></label><label>Dani putovanja po turi (u porezne dane plovidbe)<input type=number value="${S.trv}" onchange="S.trv=+this.value||0;save()"></label><label>Prag dana plovidbe godišnje (provjeri s knjigovođom)<input type=number value="${S.thr}" onchange="S.thr=+this.value||1;save()"></label><label>Rotacija (dana na brodu = dana kod kuće)<input type=number value="${S.rot}" onchange="S.rot=+this.value||1;save()"></label><p><button class=btn onclick="bk()">⬇ Izvezi sigurnosnu kopiju</button></p><p><button class=btn onclick="$('#fi').click()">⬆ Uvezi kopiju</button></p><p><button class=btn onclick="navigator.storage.persist().then(r=>alert(r?'Podaci zaštićeni':'Preglednik nije dao trajnu pohranu'))">Zaštiti podatke od brisanja</button></p><p style="color:var(--mu)">Podaci su samo na ovom uređaju. Redovito izvezi kopiju.</p></div>`};
 const bn=k=>{const a=S[k].filter(x=>exp(x)!==null&&exp(x)<180);return a.length?`<div class=banner>⚠ ${a.length} ističe/isteklo (unutar 180 dana)</div>`:''},exl=x=>{const e=exp(x);return e===null?'':e<0?'isteklo':e+' dana'};
-const N=[['sea','⚓','Staž'],['stat','📊','Statistika'],['certs','📜','Certifikati'],['docs','🗂','Dokumenti'],['pack','🎒','Popis'],['mat','▦','Matrica'],['cv','👤','CV'],['log','📖','Dnevnik'],['debt','💶','Dugovi'],['set','⚙','Postavke']];
+const N=[['home','M12 4a8 8 0 100 16 8 8 0 000-16M12 8v4l3 2','Pregled'],['sea','M4 6h16M4 12h16M4 18h10','Staž'],['stat','M5 20V10M12 20V4M19 20v-7','Statistika'],['certs','M7 3h8l4 4v14H7zM14 3v5h5','Certifikati'],['docs','M3 7h7l2 2h9v10H3z','Dokumenti'],['pack','M6 8h12l1 12H5zM9 8a3 3 0 016 0','Popis'],['mat','M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z','Matrica'],['cv','M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0','CV'],['log','M5 4h14v16H5zM9 9h6M9 13h6','Dnevnik'],['debt','M16 7a5 5 0 100 10M6 10h8M6 14h8','Dugovi'],['set','M12 15a3 3 0 100-6 3 3 0 000 6zM12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1','Postavke']];
 function R(){const u=k=>[...new Set(S.sea.map(c=>c[k]).filter(Boolean))].map(o=>`<option value="${esc(o)}">`).join('');$('#dc').innerHTML=u('co');$('#ds').innerHTML=u('ship');$('#dt').innerHTML=u('type');$('#dr').innerHTML=u('rank');
 const v=$('#v'),y=v.scrollTop;v.innerHTML=V[S.tab]();v.scrollTop=y;$('#ttl').textContent=N.find(n=>n[0]==S.tab)[2];
-$('#nv').innerHTML=N.map(n=>`<button class="${n[0]==S.tab?'on':''}" onclick="S.tab='${n[0]}';save();R()"><b>${n[1]}</b>${n[2]}</button>`).join('')}
+$('#nv').innerHTML=N.map(n=>`<button class="${n[0]==S.tab?'on':''}" onclick="S.tab='${n[0]}';save();R()"><svg width=24 height=24 viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=1.8 stroke-linecap=round stroke-linejoin=round><path d="${n[1]}"/></svg>${n[2]}</button>`).join('');const on=$('#nv .on');if(on)on.scrollIntoView({inline:'center',block:'nearest'});const ca=$('#ca');if(ca&&ca.clientWidth){ca.scrollLeft=(S.sl||0)*ca.clientWidth;dots(ca)}}
 function ai(i){const e=$('#a'+i);if(e.value.trim()){S.pack[i].i.push({t:e.value.trim(),d:0});save();R();$('#a'+i).focus()}}
 function nc(){const n=prompt('Naziv kategorije');if(n){S.pack.push({c:n,i:[]});save();R()}}
 function rn(i){const n=prompt('Novi naziv',S.pack[i].c);if(n){S.pack[i].c=n;save();R()}}
@@ -83,8 +84,22 @@ V.log=()=>`<div class=add><input id=lg placeholder="Novi događaj" onkeydown="if
 const iso=m=>new Date(m).toISOString().slice(0,10);
 function nx(){const L=srt(S.sea,'from',1)[0];if(!L)return'';const m=L.to?pd(L.to)+S.rot*D:pd(L.from)+(S.rot-1)*D,n=Math.round((m-T)/D);return`<div class=banner style="background:#12365f;color:#cfe3ff">${L.to?'Sljedeći ukrcaj':'Očekivani iskrcaj'}: ${fd(iso(m))} · ${n>=0?'za '+n+' dana':'prije '+(-n)+' dana'}</div>`}
 function bkb(){return S.sea.length&&(!S.lb||(T-pd(S.lb))/D>30)?`<div class=banner onclick="S.tab='set';save();R()">⚠ Napravi sigurnosnu kopiju (dodirni)</div>`:''}
-function tx(r){const t=r.on+r.tv,bar=S.yr!='all'?`<div class=row><span>Prag ${S.thr} dana</span><b>${Math.round(t/S.thr*100)}%</b></div><div style="height:8px;background:#22324a;margin:0 16px 8px;border-radius:4px"><div style="height:8px;border-radius:4px;background:var(--grn);width:${Math.min(100,t/S.thr*100)}%"></div></div>`:'';return`<div class=h>Dani plovidbe (porezno)</div><div class=row>Na brodu<b>${n2(r.on)}</b></div><div class=row>Putovanje (${r.tvn} × ${S.trv})<b>${n2(r.tv)}</b></div><div class=row><b>Ukupno dani plovidbe</b><b>${n2(t)}</b></div>${bar}`}
+function tx(r){const t=r.on+r.tv,bar=S.yr!='all'?`<div class=row><span>Prag ${S.thr} dana</span><b>${Math.round(t/S.thr*100)}%</b></div><div style="height:8px;background:#1a1a1a;margin:0 20px 8px;border-radius:4px"><div style="height:8px;border-radius:4px;background:var(--ac);width:${Math.min(100,t/S.thr*100)}%"></div></div>`:'';return`<div class=h>Dani plovidbe (porezno)</div><div class=row>Na brodu<b>${n2(r.on)}</b></div><div class=row>Putovanje (${r.tvn} × ${S.trv})<b>${n2(r.tv)}</b></div><div class=row><b>Ukupno dani plovidbe</b><b>${n2(t)}</b></div>${bar}`}
 function csv(){const h=['Kompanija','Brod','Tip','Dužnost','Ukrcaj','Iskrcaj','Dani na brodu','Dani putovanja','Dani plovidbe','Plaća','Godina iskrcaja'],q=x=>'"'+String(x??'').replace(/"/g,'""')+'"',rows=srt(S.sea,'from').map(c=>[c.co,c.ship,c.type,c.rank,fd(c.from),c.to?fd(c.to):'u tijeku',cd(c),S.trv,cd(c)+S.trv,c.pay||'',iso(seaEnd(c)).slice(0,4)]),a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+[h,...rows].map(x=>x.map(q).join(';')).join('\n')],{type:'text/csv'}));a.download='plovidba-'+td+'.csv';a.click()}
+function ys(y){const f=Math.min(...S.sea.map(c=>pd(c.from))),a=Math.max(f,pd(y+'-01-01')),b=Math.min(T,pd(y+'-12-31')),n=S.sea.filter(c=>seaEnd(c)>=a&&seaEnd(c)<=b).length;return{on:S.sea.reduce((s,c)=>s+ov(c,a,b),0),tv:n*S.trv}}
+function dots(e){if(!e.clientWidth)return;const i=Math.round(e.scrollLeft/e.clientWidth);if(S.sl!==i){S.sl=i;save()}[0,1,2].forEach(k=>{const d=$('#d'+k);if(d){d.style.opacity=k==i?1:.25;d.style.width=k==i?'18px':'6px'}})}
+V.home=()=>{const L=S.sea.length?srt(S.sea,'from',1)[0]:null,cy=+td.slice(0,4),
+ring=(p,big,sub,col)=>`<div style="flex:0 0 100%;scroll-snap-align:center;display:flex;justify-content:center"><div style="position:relative;width:230px;height:230px"><svg width=230 height=230 viewBox="0 0 200 200"><circle cx=100 cy=100 r=86 fill=none stroke=#1a1a1a stroke-width=10 /><circle cx=100 cy=100 r=86 fill=none stroke="${col||'#f5b94a'}" stroke-width=10 stroke-linecap=round stroke-dasharray="${Math.max(0,Math.min(1,p))*540.35} 541" transform="rotate(-90 100 100)"/></svg><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 36px"><div style="font-size:56px;font-weight:700;letter-spacing:-.04em;line-height:1">${big}</div><div style="font-size:12px;color:var(--mu);margin-top:8px;line-height:1.5">${sub}</div></div></div></div>`;
+let s1,s2,s3,cur={on:0,tv:0},home=0,yl='';
+if(!L){s1=s2=s3=ring(0,'—','Dodaj prvu turu u Stažu')}else{
+const f=Math.min(...S.sea.map(c=>pd(c.from)));cur=ys(cy);home=Math.max(0,(T-Math.max(f,pd(cy+'-01-01')))/D+1-cur.on);
+if(!L.to){const el=Math.round((T-pd(L.from))/D)+1,rem=S.rot-el;s1=ring(el/S.rot,Math.abs(rem),rem>=0?'dana do iskrcaja<br>'+fd(iso(pd(L.from)+(S.rot-1)*D)):'dana preko plana<br>iskrcaj nije unesen')}
+else{const el=Math.round((T-pd(L.to))/D),rem=S.rot-el;s1=ring(el/S.rot,Math.abs(rem),rem>=0?'dana do ukrcaja<br>'+fd(iso(pd(L.to)+S.rot*D)):'dana preko plana<br>kod kuće','#5ec98f')}
+const t=cur.on+cur.tv,all=S.sea.reduce((a,c)=>a+cd(c),0),tt=all+S.sea.length*S.trv;
+s2=ring(t/S.thr,n2(t),'od '+S.thr+' dana plovidbe<br>'+cy);
+s3=ring(all/(T-f+1),n2(tt),'ukupno dana plovidbe<br>'+n2(all)+' na brodu + '+S.sea.length*S.trv+' putovanje','#e8e8e8');
+for(let y=cy;y>=new Date(f).getUTCFullYear();y--){const q=ys(y),d=q.on+q.tv;yl+=`<div style="display:flex;align-items:center;gap:12px;padding:12px 20px"><div style="width:44px;color:var(--mu);font-size:13px">${y}</div><div style="flex:1;height:6px;border-radius:3px;background:#1a1a1a"><div style="width:${Math.min(100,d/S.thr*100)}%;height:6px;border-radius:3px;background:var(--ac)"></div></div><div style="width:64px;text-align:right;font-size:13px">${n2(d)} d</div></div>`}}
+return bn('certs')+bn('docs')+bkb()+`<div id=ca onscroll="dots(this)" style="display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-top:18px">${s1}${s2}${s3}</div><div style="display:flex;gap:8px;justify-content:center;margin:16px 0">${[0,1,2].map(i=>`<i id=d${i} style="height:6px;width:6px;border-radius:3px;background:#fff;opacity:.25;transition:.2s"></i>`).join('')}</div><div style="display:flex;margin:8px 20px 0;border-top:1px solid var(--ln);border-bottom:1px solid var(--ln)">${[['Na brodu',cur.on],['Putovanje',cur.tv],['Kod kuće',home]].map(([l,v])=>`<div style="flex:1;padding:16px 0"><div style="font-size:20px;font-weight:600">${n2(v)}</div><div style="font-size:12px;color:var(--mu)">${l} · ${cy}</div></div>`).join('')}</div>${yl?'<div class=h>Po godinama</div>'+yl:''}`};
 if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
 R();
