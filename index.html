@@ -13,15 +13,12 @@
 html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font:15px 'DM Sans',system-ui,sans-serif;overscroll-behavior:none}
 #app{display:flex;flex-direction:column;height:100%;padding-top:env(safe-area-inset-top)}
 header{padding:20px 20px 8px;font-size:26px;font-weight:700;letter-spacing:-.02em;display:flex;justify-content:space-between}
-#v{flex:1;overflow-y:auto;padding:0 0 100px}
-nav{display:flex;overflow-x:auto;background:var(--bg);border-top:1px solid var(--ln);padding-bottom:env(safe-area-inset-bottom);scrollbar-width:none}
-nav button{flex:0 0 22%;background:none;border:0;color:var(--mu);padding:10px 0;font:600 11px 'DM Sans',system-ui,sans-serif;min-height:56px;display:flex;flex-direction:column;align-items:center;gap:4px}
-nav .on{color:var(--ac)}
+#v{flex:1;overflow-y:auto;padding:0 0 120px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:16px 20px;border-bottom:1px solid var(--ln);min-height:56px}
 .row small{color:var(--mu);display:block;font-size:12px;margin-top:3px}.row .r{text-align:right;font-weight:600;white-space:nowrap}
 .h{padding:20px 20px 8px;color:var(--mu);font-size:12px;letter-spacing:.08em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
 .red{background:#3a2328;color:var(--red)}.yel{background:#38311f;color:var(--yel)}.red small,.yel small{color:inherit;opacity:.75}
-.fab{position:fixed;right:20px;bottom:calc(76px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:50%;background:var(--ac);color:#000;border:0;font-size:30px;box-shadow:0 4px 14px #000a}
+.fab{position:fixed;right:20px;bottom:calc(94px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:50%;background:var(--ac);color:#000;border:0;font-size:30px;box-shadow:0 4px 14px #000a}
 button.x{background:none;border:0;color:var(--mu);font-size:18px;padding:10px;min-width:44px;min-height:44px}
 input,textarea,select{width:100%;background:#141c29;color:var(--tx);border:1px solid var(--ln);border-radius:12px;padding:12px;font:inherit;margin-top:4px;min-height:44px}
 input[type=checkbox]{appearance:none;-webkit-appearance:none;width:22px;height:22px;min-height:0;margin:0;padding:0;flex:none;border:2px solid #4a6082;border-radius:7px;background:transparent;display:grid;place-items:center;transition:background .15s,border-color .15s}
@@ -48,14 +45,26 @@ dialog button,.btn{background:none;border:1px solid #3a4d6b;color:var(--tx);bord
 dialog[open]{animation:sheet .26s cubic-bezier(.2,.8,.2,1)}
 dialog[open]::backdrop{animation:fo .26s both}
 .pl{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--grn);margin-right:7px;vertical-align:middle;animation:pulse 1.8s ease-in-out infinite}
-.fab,.btn,nav button,button.x{transition:transform .12s,color .2s}
+nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));z-index:5;display:flex;gap:4px;padding:6px;background:rgba(34,48,70,.88);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--ln);border-radius:30px;box-shadow:0 10px 28px #0008}
+nav button{position:relative;display:flex;align-items:center;gap:0;height:48px;min-width:48px;padding:0 12px;justify-content:center;border:0;border-radius:24px;background:none;color:var(--mu);font:600 13px 'DM Sans',system-ui,sans-serif}
+nav button span{max-width:0;opacity:0;overflow:hidden;white-space:nowrap;transition:max-width .28s cubic-bezier(.2,.8,.2,1),opacity .2s,margin .28s}
+nav button.on{background:rgba(245,185,74,.15);color:var(--ac);padding:0 16px}
+nav button.on span{max-width:120px;opacity:1;margin-left:8px}
+.wd{position:absolute;top:9px;right:9px;width:8px;height:8px;border-radius:50%;background:var(--ac);border:2px solid #223046;box-sizing:content-box}.wd[hidden]{display:none}
+.tile{background:none;border:0;color:var(--tx);display:flex;flex-direction:column;align-items:center;gap:8px;font:500 12px 'DM Sans',system-ui,sans-serif;padding:4px 0;min-height:44px}
+.tile b{position:relative;width:60px;height:60px;border-radius:20px;background:var(--bg);border:1px solid var(--ln);display:grid;place-items:center;color:var(--mu);transition:background .2s,color .2s}
+.tile.on b{background:rgba(245,185,74,.15);border-color:#5a4a22;color:var(--ac)}
+.tile .wd{top:8px;right:8px;border-color:var(--bg)}
+#mn{padding:0}#mn[open] .tile{animation:fi .26s ease-out backwards}
+.kb nav,.kb .fab{display:none}
+.fab,.btn,nav button,button.x{transition:transform .12s,color .2s,background .25s}
 .fab:active,.btn:active,nav button:active,button.x:active{transform:scale(.92)}
 .row[data-k]{touch-action:pan-y}
 .noanim *,.noanim *::before,.noanim *::after{animation:none!important;transition:none!important}
 #ca::-webkit-scrollbar{display:none}
 @media print{header,nav,.fab,.np{display:none!important}html,body,#app,#v{height:auto;overflow:visible;background:#fff}.cv{margin:0}}
 </style></head><body><div id="app"><header><span id="ttl"></span><span id="hx"></span></header><div id="v"></div><nav id="nv"></nav></div>
-<dialog id="dlg"></dialog><input type="file" id="fi" accept=".json" hidden>
+<dialog id="dlg"></dialog><dialog id="mn" aria-label="Izbornik"></dialog><input type="file" id="fi" accept=".json" hidden>
 <datalist id="dc"></datalist><datalist id="ds"></datalist><datalist id="dt"></datalist><datalist id="dr"></datalist>
 <script>
 const $=s=>document.querySelector(s),D=864e5,esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -94,7 +103,7 @@ const bn=k=>{const a=S[k].filter(x=>exp(x)!==null&&exp(x)<180);return a.length?`
 const N=[['home','M12 4a8 8 0 100 16 8 8 0 000-16M12 8v4l3 2','Pregled'],['sea','M4 6h16M4 12h16M4 18h10','Staž'],['stat','M5 20V10M12 20V4M19 20v-7','Statistika'],['certs','M7 3h8l4 4v14H7zM14 3v5h5','Certifikati'],['docs','M3 7h7l2 2h9v10H3z','Dokumenti'],['pack','M6 8h12l1 12H5zM9 8a3 3 0 016 0','Popis'],['mat','M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z','Matrica'],['cv','M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0','CV'],['log','M5 4h14v16H5zM9 9h6M9 13h6','Dnevnik'],['debt','M16 7a5 5 0 100 10M6 10h8M6 14h8','Dugovi'],['set','M12 15a3 3 0 100-6 3 3 0 000 6zM12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1','Postavke']];
 function R(a){const u=k=>[...new Set(S.sea.map(c=>c[k]).filter(Boolean))].map(o=>`<option value="${esc(o)}">`).join('');$('#dc').innerHTML=u('co');$('#ds').innerHTML=u('ship');$('#dt').innerHTML=u('type');$('#dr').innerHTML=u('rank');
 const v=$('#v'),y=v.scrollTop;v.innerHTML=V[S.tab]();v.scrollTop=y;$('#ttl').textContent=N.find(n=>n[0]==S.tab)[2];
-$('#nv').innerHTML=N.map(n=>`<button class="${n[0]==S.tab?'on':''}" onclick="S.tab='${n[0]}';save();R(1)"><svg width=24 height=24 viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=1.8 stroke-linecap=round stroke-linejoin=round><path d="${n[1]}"/></svg>${n[2]}</button>`).join('');const on=$('#nv .on');if(on)on.scrollIntoView({inline:'center',block:'nearest'});const ca=$('#ca');if(ca&&ca.clientWidth){ca.scrollLeft=(S.sl||0)*ca.clientWidth;dots(ca)}fx(a)}
+nav();const ca=$('#ca');if(ca&&ca.clientWidth){ca.scrollLeft=(S.sl||0)*ca.clientWidth;dots(ca)}fx(a)}
 function ai(i){const e=$('#a'+i);if(e.value.trim()){S.pack[i].i.push({t:e.value.trim(),d:0});save();R();$('#a'+i).focus()}}
 function nc(){const n=prompt('Naziv kategorije');if(n){S.pack.push({c:n,i:[]});save();R()}}
 function rn(i){const n=prompt('Novi naziv',S.pack[i].c);if(n){S.pack[i].c=n;save();R()}}
@@ -138,6 +147,15 @@ s2=ring(t/S.thr,n2(t),'od '+S.thr+' dana plovidbe<br>'+cy,'',t);
 s3=ring(all/(T-f+1),n2(tt),'ukupno dana plovidbe<br>'+n2(all)+' na brodu + '+nT*S.trv+' putovanje','#e8e8e8',tt);
 for(let y=cy;y>=new Date(f).getUTCFullYear();y--){const q=ys(y),d=q.on+q.tv;yl+=`<div style="display:flex;align-items:center;gap:12px;padding:12px 20px"><div style="width:44px;color:var(--mu);font-size:13px">${y}</div><div style="flex:1;height:6px;border-radius:3px;background:#2c3d57"><div class=bar style="width:${Math.min(100,d/S.thr*100)}%;height:6px;border-radius:3px;background:var(--ac)"></div></div><div style="width:64px;text-align:right;font-size:13px;font-family:Outfit,sans-serif">${n2(d)} d</div></div>`}}
 return bn('certs')+bn('docs')+bkb()+`<div id=ca onscroll="dots(this)" style="display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-top:18px">${s1}${s2}${s3}</div><div style="display:flex;gap:8px;justify-content:center;margin:16px 0">${[0,1,2].map(i=>`<i id=d${i} style="height:6px;width:6px;border-radius:3px;background:#fff;opacity:.25;transition:.2s"></i>`).join('')}</div><div class=h style="padding-top:4px">Ova godina · ${cy}</div><div style="display:flex;margin:0 20px;background:var(--sf);border:1px solid var(--ln);border-radius:18px">${[['Na brodu',cur.on],['Putovanje',cur.tv],['Kod kuće',home]].map(([l,v])=>`<div style="flex:1;padding:16px 14px"><div style="font-family:Outfit,sans-serif;font-size:20px;font-weight:600" class=cu data-v="${v}">${n2(v)}</div><div style="font-size:12px;color:var(--mu)">${l}</div></div>`).join('')}</div>${yl?'<div class=h>Po godinama</div>'+yl:''}`};
+const PR=['home','sea','stat'],GRID='M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z',ico=d=>`<svg width=24 height=24 viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=1.8 stroke-linecap=round stroke-linejoin=round><path d="${d}"/></svg>`,
+warn=k=>(S[k]||[]).some(x=>exp(x)!==null&&exp(x)<180);
+function go(t){S.tab=t;save();const d=$('#mn');if(d.open)d.close();hap(6);R(1)}
+function nav(){const nv=$('#nv');if(!nv.children.length)nv.innerHTML=N.filter(n=>PR.includes(n[0])).map(n=>`<button data-t="${n[0]}" aria-label="${n[2]}" onclick="go('${n[0]}')">${ico(n[1])}<span>${n[2]}</span></button>`).join('')+`<button id=nm aria-label="Izbornik" onclick="menu()">${ico(GRID)}<span></span><i class=wd hidden></i></button>`;
+nv.querySelectorAll('button[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t==S.tab));const sec=!PR.includes(S.tab),m=$('#nm');m.classList.toggle('on',sec);if(sec)m.querySelector('span').textContent=N.find(n=>n[0]==S.tab)[2];m.querySelector('.wd').hidden=!(warn('certs')||warn('docs'))}
+function menu(){const d=$('#mn');d.innerHTML=`<div style="padding:10px 20px calc(22px + env(safe-area-inset-bottom))"><div style="width:40px;height:4px;border-radius:2px;background:#3a4d6b;margin:0 auto 20px"></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px 6px">`+N.filter(n=>!PR.includes(n[0])).map((n,i)=>`<button class="tile ${n[0]==S.tab?'on':''}" style="animation-delay:${i*28}ms" onclick="go('${n[0]}')"><b>${ico(n[1])}${(n[0]=='certs'||n[0]=='docs')&&warn(n[0])?'<i class=wd></i>':''}</b><span>${n[2]}</span></button>`).join('')+`</div></div>`;d.showModal();hap(6)}
+$('#mn').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
+document.addEventListener('focusin',e=>{if(e.target.matches('input:not([type=checkbox]),textarea')&&!e.target.closest('dialog'))document.body.classList.add('kb')});
+document.addEventListener('focusout',()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches('input:not([type=checkbox]),textarea'))document.body.classList.remove('kb')},120));
 if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
 R(1);
