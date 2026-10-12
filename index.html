@@ -167,7 +167,7 @@ function menu(){const d=$('#mn');d.innerHTML=`<div style="padding:10px 20px calc
 $('#mn').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
 document.addEventListener('focusin',e=>{if(e.target.matches('input:not([type=checkbox]),textarea')&&!e.target.closest('dialog'))document.body.classList.add('kb')});
 document.addEventListener('focusout',()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches('input:not([type=checkbox]),textarea'))document.body.classList.remove('kb')},120));
-const VER=14;
+const VER=15;
 const lerp=(a,b,t)=>{const h=q=>[1,3,5].map(i=>parseInt(q.slice(i,i+2),16)),A=h(a),B=h(b);return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('')};
 const dow=q=>['ned','pon','uto','sri','čet','pet','sub'][new Date(q+'T12:00:00').getDay()],dn=n=>n%10==1&&n%100!=11?'dan':'dana',fm=v=>v.toLocaleString('hr',{minimumFractionDigits:2,maximumFractionDigits:2}),
 curTour=()=>S.sea.find(c=>pd(c.from)<=T&&(!c.to||pd(c.to)>=T));
