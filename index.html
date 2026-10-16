@@ -290,7 +290,7 @@ function menu(){sheet(`<div style="display:grid;grid-template-columns:repeat(5,1
 $('#mn').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
 document.addEventListener('focusin',e=>{if(e.target.matches('input:not([type=checkbox]),textarea')&&!e.target.closest('dialog'))document.body.classList.add('kb')});
 document.addEventListener('focusout',()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches('input:not([type=checkbox]),textarea'))document.body.classList.remove('kb')},120));
-const VER=26;
+const VER=27;
 const MON=['Siječanj','Veljača','Ožujak','Travanj','Svibanj','Lipanj','Srpanj','Kolovoz','Rujan','Listopad','Studeni','Prosinac'],WD=['Pon','Uto','Sri','Čet','Pet','Sub','Ned'];
 const rigl=()=>RIG.replace(/#0b121d/g,'#4a5f82');
 function empty(t,u){return`<div style="text-align:center;padding:36px 20px;color:var(--mu)"><svg viewBox="0 0 120 70" width=120 style="opacity:.85"><circle cx=60 cy=28 r=12 fill="var(--ac)" opacity=.55 /><rect y=44 width=120 height=26 fill="#2a4468" opacity=.5 rx=6 /><g transform="translate(60 48) scale(.9)">${rigl()}</g></svg><div style="color:var(--tx);font-weight:600;margin-top:10px">${t}</div><div style="font-size:13px;margin-top:4px">${u||''}</div></div>`}
@@ -629,6 +629,11 @@ return sgs('rot','Rotacija i plaća',S.rot+'/'+S.rot+(pm.d>0?' · plaća računa
 +sgs('dat','Podaci i kopije',S.lb?'kopija '+fd(S.lb).slice(0,5)+'.':'bez kopije',`<div class=chips style="margin-top:14px"><button onclick="shareBk()">Podijeli kopiju</button><button onclick="bk()">Izvezi</button><button onclick="$('#fi').click()">Uvezi</button></div><button class=btn style="width:100%;margin-bottom:6px" onclick="navigator.storage.persist().then(r=>toast(r?'Podaci zaštićeni':'Preglednik nije dao trajnu pohranu'))">Zaštiti podatke od brisanja</button>${lb('Automatske kopije (zadnjih 5 dana)')}${B.length?B.map((x,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--ln);min-height:56px"><span>${fd(x.d)}<small style="display:block;color:var(--mu);font-size:12px">${Math.round(x.s.length/1024)} KB</small></span><button class=btn onclick="restoreBak(${i})">Povrati</button></div>`).join(''):'<p style="color:var(--mu)">Prva kopija nastaje pri idućem otvaranju.</p>'}${lb('Opasna zona')}<button class=btn style="width:100%;color:var(--red);border-color:var(--red)" onclick="resetAll()">Obriši sve i kreni ispočetka</button>`)
 +sgs('abt','O aplikaciji','verzija '+VER,`<p style="margin-top:14px"><button class=btn onclick="S.tips={};save();toast('Savjeti će se ponovno prikazati')">Prikaži savjete ponovno</button></p>`)}
 function setBgK(v){setBg(v=='d'?'':v)}
+
+/* ===== v27: značka na ikoni ===== */
+function badge(){try{if(!navigator.setAppBadge||FAM)return;const r=S.sea.length&&toEnd();if(!r){navigator.clearAppBadge&&navigator.clearAppBadge();return}const n=Math.round((r[1]-T)/D);n>0?navigator.setAppBadge(n):navigator.clearAppBadge&&navigator.clearAppBadge()}catch(e){}}
+{const a=after;after=function(){a();badge()}}
+document.addEventListener('visibilitychange',badge);
 const kbFix=()=>{const a=document.activeElement;if(!a||!a.matches('input:not([type=checkbox]),textarea'))document.body.classList.remove('kb')};
 {const a=after;after=function(){a();kbFix()}}
 document.addEventListener('pointerdown',()=>setTimeout(kbFix,150),true);
