@@ -171,6 +171,7 @@ details.more{margin:6px 0 0}details.more>summary{list-style:none;cursor:pointer;
 .cd.e.bd{background:linear-gradient(135deg,var(--ha) 50%,var(--ra) 50%)}.cd.e.dd{background:linear-gradient(135deg,var(--ra) 50%,var(--ha) 50%)}
 header{background:linear-gradient(180deg,rgb(var(--acr)/.07),transparent)}nav{border-color:color-mix(in srgb,var(--ln),var(--ac) 20%)}
 .row{padding:18px 20px}.fab,.btn{border-radius:var(--r1)}
+nav{view-transition-name:nav}::view-transition-group(nav),::view-transition-new(nav){animation:none}::view-transition-old(nav){display:none}
 </style></head><body><div id="app"><header><span id="ttl"></span><span id="hx"></span></header><div id="v"></div><nav id="nv"></nav></div>
 <dialog id="dlg"></dialog><dialog id="mn" aria-label="Izbornik"></dialog><div id="lk"></div><div id="tt"></div><input type="file" id="fi" accept=".json" hidden>
 
@@ -283,7 +284,7 @@ function menu(){sheet(`<div style="display:grid;grid-template-columns:repeat(5,1
 $('#mn').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
 document.addEventListener('focusin',e=>{if(e.target.matches('input:not([type=checkbox]),textarea')&&!e.target.closest('dialog'))document.body.classList.add('kb')});
 document.addEventListener('focusout',()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches('input:not([type=checkbox]),textarea'))document.body.classList.remove('kb')},120));
-const VER=22;
+const VER=23;
 const MON=['Siječanj','Veljača','Ožujak','Travanj','Svibanj','Lipanj','Srpanj','Kolovoz','Rujan','Listopad','Studeni','Prosinac'],WD=['Pon','Uto','Sri','Čet','Pet','Sub','Ned'];
 const rigl=()=>RIG.replace(/#0b121d/g,'#4a5f82');
 function empty(t,u){return`<div style="text-align:center;padding:36px 20px;color:var(--mu)"><svg viewBox="0 0 120 70" width=120 style="opacity:.85"><circle cx=60 cy=28 r=12 fill="var(--ac)" opacity=.55 /><rect y=44 width=120 height=26 fill="#2a4468" opacity=.5 rx=6 /><g transform="translate(60 48) scale(.9)">${rigl()}</g></svg><div style="color:var(--tx);font-weight:600;margin-top:10px">${t}</div><div style="font-size:13px;margin-top:4px">${u||''}</div></div>`}
@@ -552,5 +553,9 @@ ev=(o.e||[]).map(([d,n,rep])=>({n,m:nextOcc({d,rep})})).filter(x=>x.m&&x.m-T<=15
 return`<div style="padding:calc(env(safe-area-inset-top) + 30px) 0 40px"><div style="text-align:center;padding:0 20px"><div class=lbl>${lab}</div><div class=num style="font-size:88px;line-height:1.1;margin:10px 0 4px;color:var(--ac)">${big}</div><div style="color:var(--mu)">${sub}</div></div>${rows?'<div class=h>Raspored</div>'+rows:''}${ev?'<div class=h>Važni datumi</div>'+ev:''}<p style="color:var(--mu);font-size:12px;text-align:center;padding:20px 24px">Stanje od ${fd(o.g)}. Za svježe podatke zatraži novu poveznicu.</p></div>`}
 
 applyTheme();autoSnap();R(1);if(new URLSearchParams(location.search).get('a')=='tour'&&!document.documentElement.classList.contains('locked'))ed('sea',-1);
+const kbFix=()=>{const a=document.activeElement;if(!a||!a.matches('input:not([type=checkbox]),textarea'))document.body.classList.remove('kb')};
+{const a=after;after=function(){a();kbFix()}}
+document.addEventListener('pointerdown',()=>setTimeout(kbFix,150),true);
+if(visualViewport)visualViewport.addEventListener('resize',()=>setTimeout(kbFix,200));
 if(FAM){R=function(){};document.documentElement.classList.remove('locked');document.body.innerHTML='<div style="height:100%;overflow-y:auto">'+famView()+'</div>'}
 </script></body></html>
