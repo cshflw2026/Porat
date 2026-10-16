@@ -162,10 +162,20 @@ svg.ic{width:1.05em;height:1.05em;stroke:currentColor;fill:none;stroke-width:2.2
 @media(max-width:389px){.cd{aspect-ratio:auto;height:44px;min-height:0;min-width:0}}
 @media(max-width:360px){nav{gap:2px;padding:5px}nav button{min-width:42px;padding:0 9px}nav button.on{padding:0 11px}nav button.on span{margin-left:6px}}
 @media print{header,nav,.fab,.np{display:none!important}html,body,#app,#v{height:auto;overflow:visible;background:#fff}.cv{margin:0}}
+
+/* v22 */
+details.more{margin:6px 0 0}details.more>summary{list-style:none;cursor:pointer;margin:0 20px;padding:14px 4px;color:var(--mu);font:600 12px 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;min-height:44px}details.more>summary::-webkit-details-marker{display:none}details.more>summary::after{content:'▾';font-size:15px;transition:transform .2s}details.more[open]>summary::after{transform:rotate(180deg)}
+.banner,.glass,.card2,.tip{border-radius:var(--r2)}.card2{background:rgb(var(--glr)/.28)}.card2 .lbl{display:block;margin-bottom:8px}
+.lbl{font-size:11px;font-weight:600;letter-spacing:.1em}.num,.cu{font-weight:600;letter-spacing:-.02em}
+.cd.e{--ra:color-mix(in srgb,var(--tint,#22314a) 45%,rgb(var(--acr)/.3));background:var(--ra)}
+.cd.e.bd{background:linear-gradient(135deg,var(--ha) 50%,var(--ra) 50%)}.cd.e.dd{background:linear-gradient(135deg,var(--ra) 50%,var(--ha) 50%)}
+header{background:linear-gradient(180deg,rgb(var(--acr)/.07),transparent)}nav{border-color:color-mix(in srgb,var(--ln),var(--ac) 20%)}
+.row{padding:18px 20px}.fab,.btn{border-radius:var(--r1)}
 </style></head><body><div id="app"><header><span id="ttl"></span><span id="hx"></span></header><div id="v"></div><nav id="nv"></nav></div>
 <dialog id="dlg"></dialog><dialog id="mn" aria-label="Izbornik"></dialog><div id="lk"></div><div id="tt"></div><input type="file" id="fi" accept=".json" hidden>
 
 <script>
+const FAM=/^#f=/.test(location.hash);if(FAM)Storage.prototype.setItem=function(){};
 const $=s=>document.querySelector(s),D=864e5,esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const DEF=()=>({pack:[{c:'Dokumenti',i:[{t:'Putovnica',d:0},{t:'Pomorska knjižica',d:0}]},{c:'Elektronika',i:[{t:'Punjač i powerbank',d:0}]}],sea:[],certs:[],docs:[],cv:{},edu:[],log:[],debts:[],cur:'EUR',tab:'home',yr:'all',mx:{}});
 function norm(o){const isO=x=>x&&typeof x==='object'&&!Array.isArray(x);if(!isO(o))return null;
@@ -259,21 +269,21 @@ const P=proj(cy),t=cur.on+cur.tv,all=S.sea.reduce((a,c)=>a+ov(c,f,T),0),nT=S.sea
 s2=ring(t/S.thr,n2(t),'od '+S.thr+' dana plovidbe<br>'+cy+(P?'<br>procjena 31.12.: ~'+n2(P.tot):''),'',t);
 s3=ring(all/((T-f)/D+1),n2(tt),'ukupno dana plovidbe<br>'+n2(all)+' na brodu + '+nT*S.trv+' putovanje','#e8e8e8',tt);
 for(let y=cy;y>=new Date(f).getUTCFullYear();y--){const q=ys(y),d=q.on+q.tv;yl+=`<div style="display:flex;align-items:center;gap:12px;padding:12px 20px"><div style="width:44px;color:var(--mu);font-size:13px">${y}</div><div style="flex:1;height:6px;border-radius:3px;background:var(--ln)"><div class=bar style="width:${Math.min(100,d/S.thr*100)}%;height:6px;border-radius:3px;background:var(--ac)"></div></div><div style="width:64px;text-align:right;font-size:13px;font-family:Outfit,sans-serif">${n2(d)} d</div></div>`}}
-const nt=nextStep();return `<div id=ca onscroll="dots(this)" style="display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-top:18px">${s1}${s2}${s3}</div><div style="display:flex;gap:8px;justify-content:center;margin:16px 0">${[0,1,2].map(i=>`<i id=d${i} style="height:6px;width:6px;border-radius:3px;background:#fff;opacity:.25;transition:.2s"></i>`).join('')}</div>${quickAct()}${nt}${pvCards({cur,home,yl,cy})}${pvEdit()}`};
-const GRP={home:['home'],cal:['cal'],sea:['sea','mat','log'],stat:['stat','bdg','car'],docs:['certs','docs'],money:['goals','debt','alloc'],pack:['pack'],cv:['cv'],set:['set','thm']},GL={home:'Pregled',cal:'Kalendar',sea:'Staž',stat:'Statistika',docs:'Dokumenti',money:'Novac',pack:'Popis',cv:'CV',set:'Postavke'},GIC={home:'home',cal:'cal',sea:'sea',stat:'stat',docs:'certs',money:'goals',pack:'pack',cv:'cv',set:'set'},PR=['home','cal','sea','stat'],GRID='M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z',
+const nt=nextStep();return `<div id=ca onscroll="dots(this)" style="display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-top:18px">${s1}${s2}${s3}</div><div style="display:flex;gap:8px;justify-content:center;margin:16px 0">${[0,1,2].map(i=>`<i id=d${i} style="height:6px;width:6px;border-radius:3px;background:#fff;opacity:.25;transition:.2s"></i>`).join('')}</div>${quickAct()}${nextTourBtn()}${nt}${pvCards({cur,home,yl,cy})}${pvEdit()}`};
+const GRP={home:['home'],cal:['cal'],sea:['sea','mat','log'],stat:['stat','bdg','car'],docs:['certs','docs'],money:['goals','debt','alloc'],pack:['pack'],cv:['cv'],set:['set','thm']},GL={home:'Pregled',cal:'Kalendar',sea:'Staž',stat:'Statistika',docs:'Dokumenti',money:'Novac',pack:'Popis',cv:'CV',set:'Postavke'},GIC={home:'home',cal:'cal',sea:'sea',stat:'stat',docs:'certs',money:'goals',pack:'pack',cv:'cv',set:'set'},PR=['home','cal','money','docs'],GRID='M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z',
 ico=d=>`<svg width=24 height=24 viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=1.8 stroke-linecap=round stroke-linejoin=round><path d="${d}"/></svg>`,icg=g=>ico(N.find(n=>n[0]==GIC[g])[1]),grp=t=>Object.keys(GRP).find(k=>GRP[k].includes(t)),
 warn=k=>(S[k]||[]).some(x=>exp(x)!==null&&exp(x)<180);
 function go(t){const L=gt(t),lv=L?(S.last&&L.includes(S.last[t])?S.last[t]:L[0]):t,dir=ORD.indexOf(grp(lv))-ORD.indexOf(grp(S.tab));S.tab=lv;save();const d=$('#mn');if(d.open)d.close();hap(6);vt(()=>R(2),dir)}
 function segGo(t){const g=grp(t),L=gt(g),sg=document.querySelector('.seg');S.tab=t;(S.last??={})[g]=t;save();if(sg&&!RM){sg.style.setProperty('--i',L.indexOf(t));sg.querySelectorAll('button').forEach((b,k)=>b.classList.toggle('on',k==L.indexOf(t)));setTimeout(()=>R(1),170)}else R(1)}
 function segHtml(){const L=gt(grp(S.tab));if(!L||L.length<2)return'';return`<div class=seg style="--n:${L.length};--i:${L.indexOf(S.tab)}"><u></u>${L.map(t=>`<button class="${t==S.tab?'on':''}" onclick="segGo('${t}')">${N.find(n=>n[0]==t)[2]}</button>`).join('')}</div>`}
 function nav(){const nv=$('#nv'),g=grp(S.tab);if(!nv.children.length)nv.innerHTML=PR.map(k=>`<button data-t="${k}" aria-label="${GL[k]}" onclick="go('${k}')">${icg(k)}<span>${GL[k]}</span></button>`).join('')+`<button id=nm aria-label="Izbornik" onclick="menu()">${ico(GRID)}<span></span><i class=wd hidden></i></button>`;
-nv.querySelectorAll('button[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t==g));const sec=!PR.includes(g),m=$('#nm');m.classList.toggle('on',sec);if(sec)m.querySelector('span').textContent=GL[g];m.querySelector('.wd').hidden=!(warn('certs')||warn('docs'))}
+nv.querySelectorAll('button[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t==g));const sec=!PR.includes(g),m=$('#nm');m.classList.toggle('on',sec);if(sec)m.querySelector('span').textContent=GL[g];m.querySelector('.wd').hidden=1;{const dk=nv.querySelector('[data-t=docs]');if(dk)(dk.querySelector('.wd')||dk.appendChild(Object.assign(document.createElement('i'),{className:'wd'}))).hidden=!(warn('certs')||warn('docs'))}}
 function sheet(h){const d=$('#mn');d.innerHTML=`<div style="padding:12px 20px calc(22px + env(safe-area-inset-bottom))"><div style="width:40px;height:4px;border-radius:2px;background:#3a4d6b;margin:0 auto 16px"></div>${h}</div>`;if(!d.open)d.showModal()}
-function menu(){sheet(`<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">`+(S.adv===false?['docs','money','pack','set']:['docs','money','pack','cv','set']).map((g,i)=>`<button class="tile ${grp(S.tab)==g?'on':''}" style="animation-delay:${i*28}ms" onclick="go('${g}')"><b>${icg(g)}${g=='docs'&&(warn('certs')||warn('docs'))?'<i class=wd></i>':''}</b><span>${GL[g]}</span></button>`).join('')+`</div>`);hap(6)}
+function menu(){sheet(`<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px">`+(S.adv===false?['sea','stat','pack','set']:['sea','stat','pack','cv','set']).map((g,i)=>`<button class="tile ${grp(S.tab)==g?'on':''}" style="animation-delay:${i*28}ms" onclick="go('${g}')"><b>${icg(g)}${g=='docs'&&(warn('certs')||warn('docs'))?'<i class=wd></i>':''}</b><span>${GL[g]}</span></button>`).join('')+`</div>`);hap(6)}
 $('#mn').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
 document.addEventListener('focusin',e=>{if(e.target.matches('input:not([type=checkbox]),textarea')&&!e.target.closest('dialog'))document.body.classList.add('kb')});
 document.addEventListener('focusout',()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches('input:not([type=checkbox]),textarea'))document.body.classList.remove('kb')},120));
-const VER=21;
+const VER=22;
 const MON=['Siječanj','Veljača','Ožujak','Travanj','Svibanj','Lipanj','Srpanj','Kolovoz','Rujan','Listopad','Studeni','Prosinac'],WD=['Pon','Uto','Sri','Čet','Pet','Sub','Ned'];
 const rigl=()=>RIG.replace(/#0b121d/g,'#4a5f82');
 function empty(t,u){return`<div style="text-align:center;padding:36px 20px;color:var(--mu)"><svg viewBox="0 0 120 70" width=120 style="opacity:.85"><circle cx=60 cy=28 r=12 fill="var(--ac)" opacity=.55 /><rect y=44 width=120 height=26 fill="#2a4468" opacity=.5 rx=6 /><g transform="translate(60 48) scale(.9)">${rigl()}</g></svg><div style="color:var(--tx);font-weight:600;margin-top:10px">${t}</div><div style="font-size:13px;margin-top:4px">${u||''}</div></div>`}
@@ -513,5 +523,34 @@ if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
 if('serviceWorker'in navigator){const had=!!navigator.serviceWorker.controller;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had)showUpdate()});navigator.serviceWorker.register('sw.js').then(g=>g.update()).catch(()=>{})}
 {const qa=new URLSearchParams(location.search).get('a');if(qa)S.tab=({cal:'cal',pack:'pack',tour:'sea'})[qa]||S.tab}
 if(S.lock){document.documentElement.classList.add('locked');showLock()}else document.documentElement.classList.remove('locked');
+
+/* ===== v22 ===== */
+const MSV=[100,200,365,500,730,1000,1500,2000],PM=()=>S.pm??={d:0,b:0,x:0,c:'EUR',fx:1};
+function flash(){if(RM)return;const e=document.createElement('div');e.style.cssText='position:fixed;inset:0;z-index:89;pointer-events:none;background:radial-gradient(circle at 50% 38%,rgb(var(--acr)/.55),transparent 62%);animation:fo .9s ease-out reverse forwards';document.body.appendChild(e);setTimeout(()=>e.remove(),950)}
+{const q=quickBoard;quickBoard=function(){q();flash();hap([20,40,20])}}
+function msCheck(){const d=onDays(),h=MSV.filter(m=>d>=m).pop()||0;if(S.msv===undefined){S.msv=h;save();return}if(h>S.msv){S.msv=h;save();toast(n2(h)+' dana na moru');confetti();hap([20,40,20,40,30])}}
+const pcalc=c=>{const p=PM();return Math.round(((cd(c)*p.d+p.b)*(1-p.x/100))*(p.fx||1)*100)/100};
+function autoPay(){if(!(PM().d>0))return;let ch=0;S.sea.forEach(c=>{if(!c.to||pd(c.to)>T)return;if(!(+c.pay>0)||+c.pay===c.pa){const v=pcalc(c);if(v!==+c.pay){c.pay=v;c.pa=v;ch=1}}});if(ch)save()}
+{const a=after;after=function(){a();msCheck();autoPay()}}
+function payEst(on){if(+on.pay>0)return +on.pay;if(PM().d>0)return pcalc({from:on.from,to:on.to||iso(pd(on.from)+S.rot*D)});const a=srt(S.sea.filter(c=>c!==on&&c.to&&+c.pay>0&&pd(c.to)<T),'to',1).slice(0,3);return a.length?a.reduce((q,c)=>q+ +c.pay,0)/a.length:0}
+function payForm(){const p=PM(),f=(l,k)=>`<label>${l}<input type=number inputmode=decimal step=any value="${p[k]||''}" onchange="PM().${k}=+this.value||0;save();R()"></label>`;return`<div class=pad><div class=lbl style="margin:22px 0 10px">Plaća</div><div style="color:var(--mu);font-size:13px;margin-bottom:8px">Plaća se sama izračuna pri iskrcaju. Ručno upisan iznos u turi uvijek ima prednost.</div>${f('Dnevnica po danu na brodu','d')}${f('Bonus po turi','b')}${f('Odbitak (%)','x')}<label>Valuta plaće<select onchange="PM().c=this.value;save();R()">${['EUR','USD','GBP','NOK'].map(c=>`<option ${c==p.c?'selected':''}>${c}</option>`).join('')}</select></label>${f('Tečaj (1 '+p.c+' = ? '+S.cur+')','fx')}</div>`}
+{const s=setView;setView=function(){return s()+payForm()}}
+function nextTourInfo(){const L=srt(S.sea,'from',1)[0];if(!L||!L.to||curTour()||S.sea.some(c=>pd(c.from)>T))return null;const f=iso(pd(L.to)+S.rot*D);return{L,f,t:iso(pd(f)+S.rot*D)}}
+function nextTourBtn(){const n=nextTourInfo();return n?`<div style="padding:12px 20px 0"><button class=btn style="width:100%;height:48px" onclick="nextTour()">＋ Iduća tura · ukrcaj ${fd(n.f).slice(0,5)}.</button></div>`:''}
+function nextTour(){const n=nextTourInfo();if(!n)return;const sn=snap(),L=n.L;S.sea.push({co:L.co||'',ship:L.ship||'',type:L.type||'',rank:L.rank||'',from:n.f,to:n.t,pay:''});S.log.push({d:n.f,t:'Ukrcaj: '+(L.ship||'')});save();R(1);hap(15);snack('Tura dodana: '+fd(n.f).slice(0,5)+'. – '+fd(n.t).slice(0,5)+'.',sn)}
+{const s=V.sea;V.sea=()=>nextTourBtn()+s()}
+function pvCards(a){const P=S.pv||{},hid=P.hide||[],m={live:liveCard,alloc:allocCard,ev:evCard,year:()=>yearBlock(a)},o=pvOrd().filter(k=>!hid.includes(k)&&!(S.adv===false&&k=='alloc')).map(k=>m[k]()).filter(Boolean);return sumCard()+(o[0]||'')+(o.length>1?`<details class=more${P.open?' open':''} ontoggle="(S.pv=S.pv||{}).open=this.open;save()"><summary>Više</summary>${o.slice(1).join('')}</details>`:'')}
+const b64u=s=>btoa(unescape(encodeURIComponent(s))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''),ub64u=s=>decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/'))));
+function famLink(nm){const A=tl().filter(t=>t.e>=T-3*D).sort((a,b)=>a.f-b.f).slice(0,6).map(t=>[iso(t.f),iso(t.e),t.k]);return location.origin+location.pathname+'#f='+b64u(JSON.stringify({n:nm,g:td,p:A,e:S.ev.filter(e=>e.d).map(e=>[e.d,e.n,e.rep||''])}))}
+async function famShare(){const n=await askText('Ime na obiteljskom pregledu',S.nm||'');if(!n)return;S.nm=n;save();const u=famLink(n);if(navigator.share){try{await navigator.share({title:'Raspored — '+n,url:u})}catch(e){}}else navigator.clipboard.writeText(u).then(()=>toast('Poveznica kopirana'))}
+{const c=V.cal;V.cal=()=>c()+'<div style="padding:8px 20px 0"><button class=btn style="width:100%" onclick="famShare()">Obiteljska poveznica</button></div>'}
+function famView(){let o;try{o=JSON.parse(ub64u(location.hash.slice(3)))}catch(e){return'<div style="padding:60px 24px;text-align:center">Poveznica nije ispravna.</div>'}
+const P=(o.p||[]).map(([f,e,k])=>({f:pd(f),e:pd(e),k})),cur=P.find(x=>x.f<=T&&T<=x.e),nx=P.find(x=>x.f>T),nm=esc(o.n||'Ja');let big='—',sub='nema podataka o rasporedu',lab=nm;
+if(cur){big=Math.round((cur.e-T)/D);lab=nm+' je na rigu';sub=dn(big)+' do povratka · '+fd(iso(cur.e))}else if(nx){big=Math.round((nx.f-T)/D);lab=nm+' je doma';sub=dn(big)+' do ukrcaja · '+fd(iso(nx.f))}
+const rows=P.filter(x=>x.e>=T).map(x=>`<div class=row><div>${x.k=='s'?'Plan po rotaciji':'Na rigu'}</div><div class=r>${fd(iso(x.f)).slice(0,5)}. – ${fd(iso(x.e)).slice(0,5)}.<small>${Math.round((x.e-x.f)/D)+1} ${dn(Math.round((x.e-x.f)/D)+1)}</small></div></div>`).join(''),
+ev=(o.e||[]).map(([d,n,rep])=>({n,m:nextOcc({d,rep})})).filter(x=>x.m&&x.m-T<=150*D).sort((a,b)=>a.m-b.m).slice(0,5).map(x=>`<div class=row><div>${esc(x.n)}</div><div class=r>${fd(iso(x.m))}</div></div>`).join('');
+return`<div style="padding:calc(env(safe-area-inset-top) + 30px) 0 40px"><div style="text-align:center;padding:0 20px"><div class=lbl>${lab}</div><div class=num style="font-size:88px;line-height:1.1;margin:10px 0 4px;color:var(--ac)">${big}</div><div style="color:var(--mu)">${sub}</div></div>${rows?'<div class=h>Raspored</div>'+rows:''}${ev?'<div class=h>Važni datumi</div>'+ev:''}<p style="color:var(--mu);font-size:12px;text-align:center;padding:20px 24px">Stanje od ${fd(o.g)}. Za svježe podatke zatraži novu poveznicu.</p></div>`}
+
 applyTheme();autoSnap();R(1);if(new URLSearchParams(location.search).get('a')=='tour'&&!document.documentElement.classList.contains('locked'))ed('sea',-1);
+if(FAM){R=function(){};document.documentElement.classList.remove('locked');document.body.innerHTML='<div style="height:100%;overflow-y:auto">'+famView()+'</div>'}
 </script></body></html>
