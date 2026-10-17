@@ -305,7 +305,7 @@ function menu(){sheet(`<div style="display:grid;grid-template-columns:repeat(5,1
 $('#mn').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
 document.addEventListener('focusin',e=>{if(e.target.matches('input:not([type=checkbox]),textarea')&&!e.target.closest('dialog'))document.body.classList.add('kb')});
 document.addEventListener('focusout',()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches('input:not([type=checkbox]),textarea'))document.body.classList.remove('kb')},120));
-const VER=34;
+const VER=35;
 const MON=['Siječanj','Veljača','Ožujak','Travanj','Svibanj','Lipanj','Srpanj','Kolovoz','Rujan','Listopad','Studeni','Prosinac'],WD=['Pon','Uto','Sri','Čet','Pet','Sub','Ned'];
 const rigl=()=>RIG.replace(/#0b121d/g,'#4a5f82');
 function empty(t,u){return`<div style="text-align:center;padding:36px 20px;color:var(--mu)"><svg viewBox="0 0 120 70" width=120 style="opacity:.85"><circle cx=60 cy=28 r=12 fill="var(--ac)" opacity=.55 /><rect y=44 width=120 height=26 fill="#2a4468" opacity=.5 rx=6 /><g transform="translate(60 48) scale(.9)">${rigl()}</g></svg><div style="color:var(--tx);font-weight:600;margin-top:10px">${t}</div><div style="font-size:13px;margin-top:4px">${u||''}</div></div>`}
@@ -559,6 +559,51 @@ const rows=P.filter(x=>x.e>=T).map(x=>`<div class=row><div>${x.k=='s'?'Plan po r
 ev=(o.e||[]).map(([d,n,rep])=>({n,m:nextOcc({d,rep})})).filter(x=>x.m&&x.m-T<=150*D).sort((a,b)=>a.m-b.m).slice(0,5).map(x=>`<div class=row><div>${esc(x.n)}</div><div class=r>${fd(iso(x.m))}</div></div>`).join('');
 return`<div style="padding:calc(env(safe-area-inset-top) + 30px) 0 40px"><div style="text-align:center;padding:0 20px"><div class=lbl>${lab}</div><div class=num style="font-size:88px;line-height:1.1;margin:10px 0 4px;color:var(--ac)">${big}</div><div style="color:var(--mu)">${sub}</div></div>${rows?'<div class=h>Raspored</div>'+rows:''}${ev?'<div class=h>Važni datumi</div>'+ev:''}<p style="color:var(--mu);font-size:12px;text-align:center;padding:20px 24px">Stanje od ${fd(o.g)}. Za svježe podatke zatraži novu poveznicu.</p></div>`}
 
+const GLV='attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}',GLF=`
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+uniform vec2 R;uniform float T,W;uniform vec3 S,M;uniform vec4 P;
+float h1(float n){return fract(sin(n)*43758.5453);}
+float h3(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
+float n2(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);float a=h1(i.x+i.y*57.),b=h1(i.x+1.+i.y*57.),c=h1(i.x+(i.y+1.)*57.),d=h1(i.x+1.+(i.y+1.)*57.);return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}
+float fbm(vec2 p){float a=.5,s=0.;for(int i=0;i<5;i++){s+=a*n2(p);p=p*2.03+7.1;a*=.5;}return s;}
+vec3 sky(vec3 rd,bool cl){
+float se=S.y,day=smoothstep(-.14,.22,se),nt=1.-smoothstep(-.22,-.02,se),y=clamp(rd.y,0.,1.);
+vec3 zen=mix(vec3(.01,.015,.05),vec3(.14,.32,.62),day),hor=mix(vec3(.03,.05,.11),vec3(.66,.77,.9),day);
+vec3 c=mix(hor,zen,pow(y,.42));
+float tw=exp(-abs(se+.04)*7.),az=max(dot(normalize(S.xz+1e-4),normalize(rd.xz+1e-4)),0.);
+c+=vec3(1.,.48,.18)*tw*(.25+1.1*pow(az,3.))*exp(-y*3.5)*.9;
+c=mix(c,c*vec3(1.1,.95,.8)+vec3(.12,.05,.0),W*.5*exp(-y*4.));
+float sd=dot(rd,S),sv=smoothstep(-.06,-.01,se);
+c+=vec3(1.,.85,.6)*(pow(max(sd,0.),64.)*.25+pow(max(sd,0.),4096.)*2.+smoothstep(.9996,.9999,sd)*3.)*sv;
+vec3 g=rd*90.,fl=floor(g);float st=step(.975,h3(fl))*smoothstep(.2,0.,length(fract(g)-.5))*(.6+.4*sin(T*2.+h3(fl)*40.));
+c+=vec3(.9,.95,1.)*st*nt*smoothstep(-.02,.15,rd.y);
+vec3 nm=normalize(vec3(.35,.75,.55));float q=dot(rd,nm)*4.5,mw=exp(-q*q)*(.5+.8*fbm(rd.xz*4.+rd.y*3.));
+c+=vec3(.25,.28,.45)*mw*.35*nt*smoothstep(0.,.2,rd.y);
+float md=dot(rd,M);
+if(md>.985&&M.y>-.05){vec3 t1=normalize(cross(vec3(0.,1.,0.),M)),t2=cross(M,t1);vec2 m=vec2(dot(rd,t1),dot(rd,t2))/.045;float r=length(m);
+if(r<1.){float e=(1.-2.*P.z)*sqrt(1.-m.y*m.y),lit=smoothstep(e-.06,e+.06,m.x*P.w);vec3 mc=mix(vec3(.04,.05,.08),vec3(.95,.93,.85),lit)*(.85+.15*n2(m*8.));c=mix(c,mc,smoothstep(1.,.92,r));}
+c+=vec3(.5,.6,.8)*pow(max(md,0.),300.)*.3*P.z;}
+if(cl&&rd.y>0.){vec2 p=rd.xz/(rd.y+.2)*1.3+vec2(T*.012,T*.004);float f=fbm(p),cv=smoothstep(.5,.78,f)*smoothstep(0.,.12,rd.y);
+vec3 cc=mix(vec3(.08,.1,.16),vec3(.95,.96,1.),day);cc=mix(cc,vec3(1.,.55,.3),tw*.7*az);cc*=.55+.45*smoothstep(.45,.7,fbm(p*1.9+3.));c=mix(c,cc,cv*.85);}
+return c;}
+void main(){vec2 uv=(gl_FragCoord.xy-.5*R)/R.y;
+vec3 f=vec3(sin(P.x)*cos(P.y),sin(P.y),cos(P.x)*cos(P.y)),r=vec3(cos(P.x),0.,-sin(P.x)),u=cross(f,r),rd=normalize(r*uv.x+u*uv.y+f*1.15),col;
+if(rd.y>-.002)col=sky(rd,true);else{
+float t=1.7/-rd.y;vec2 q=(vec3(0.,1.7,0.)+rd*t).xz;float dx=0.,dz=0.;
+for(int i=0;i<5;i++){float fi=float(i);vec2 d=vec2(sin(fi*1.7+.6),cos(fi*2.3+.2));float k=.6+fi*.55,a=.5/(k*k+1.),ph=dot(d,q)*k+T*(.7+fi*.25);dx+=d.x*k*a*cos(ph);dz+=d.y*k*a*cos(ph);}
+float at=exp(-t*.028);vec3 n=normalize(vec3(-dx*at*1.2,1.,-dz*at*1.2)),rf=reflect(rd,n);rf.y=abs(rf.y);
+float fr=.02+.98*pow(1.-max(dot(n,-rd),0.),5.);vec3 deep=mix(vec3(.004,.012,.03),vec3(.02,.09,.16),smoothstep(-.14,.22,S.y));
+col=mix(deep,sky(rf,false),fr);
+col+=vec3(1.,.8,.55)*pow(max(dot(rf,S),0.),300.)*1.5*smoothstep(-.05,.1,S.y);
+col+=vec3(.7,.8,1.)*pow(max(dot(rf,M),0.),600.)*P.z*step(0.,M.y)*1.2;
+col=mix(col,sky(normalize(vec3(rd.x,.0,rd.z)),false),1.-exp(-t*.02));}
+col=1.-exp(-col*1.15);col*=1.-.28*dot(uv*vec2(.9,1.),uv*vec2(.9,1.));
+gl_FragColor=vec4(col,1.);}`;
+const GLS={raf:0,cv:null,gl:null,sc:.75,fail:0,deg:0,last:0,fa:[],yaw:Math.PI,ty:0,tp:0,cy:0,cp:0,pos:null,pt:0,idle:Date.now(),warm:0,bat:null};
 applyTheme();autoSnap();R(1);if(new URLSearchParams(location.search).get('a')=='tour'&&!document.documentElement.classList.contains('locked'))ed('sea',-1);
 
 /* ===== v24: asistent + reset ===== */
@@ -647,51 +692,6 @@ for(let i=0;i<44;i++)st+=`<circle cx="${(r(i)*390).toFixed(0)}" cy="${(r(i+99)*4
 const cl=[[50,120,.9],[250,200,.7],[340,90,1.1],[150,300,.6]].map(([x,y,s],i)=>`<g class="cld c${i%3}"><g transform="translate(${x} ${y}) scale(${s})" fill="#fff" opacity="${(.04+.16*(1-sk.st)).toFixed(2)}"><ellipse rx="26" ry="7"/><ellipse cx="14" cy="-6" rx="16" ry="8"/><ellipse cx="-12" cy="-4" rx="14" ry="6"/></g></g>`).join(''),
 wv=[[560,.4],[600,.3],[650,.22],[710,.16],[780,.1]].map(([y,o],i)=>`<g class="wv w${i%4}"><path d="M0 ${y}q16 -5 32 0${'t32 0'.repeat(14)}" fill="none" stroke="#5b7fb0" stroke-width="1.2" opacity="${o}"/></g>`).join('');
 e.innerHTML=`<svg viewBox="0 0 390 800" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><defs><linearGradient id=sg x1=0 y1=0 x2=0 y2=1><stop offset="0" stop-color="${sk.top}"/><stop offset=".45" stop-color="${sk.mid}"/><stop offset=".7" stop-color="${hz}"/></linearGradient><linearGradient id=sa x1=0 y1=0 x2=0 y2=1><stop offset="0" stop-color="${lerp(hz,'#1b2c47',.7)}"/><stop offset="1" stop-color="#08101c"/></linearGradient></defs><rect width="390" height="570" fill="url(#sg)"/><rect y="560" width="390" height="240" fill="url(#sa)"/><g class="p1">${st}</g>${moonSvg(sk.st)}<g class="p2">${cl}</g><g class="p3">${wv}</g></svg><div class="ov"></div>`}
-const GLV='attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}',GLF=`
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-uniform vec2 R;uniform float T,W;uniform vec3 S,M;uniform vec4 P;
-float h1(float n){return fract(sin(n)*43758.5453);}
-float h3(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
-float n2(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);float a=h1(i.x+i.y*57.),b=h1(i.x+1.+i.y*57.),c=h1(i.x+(i.y+1.)*57.),d=h1(i.x+1.+(i.y+1.)*57.);return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}
-float fbm(vec2 p){float a=.5,s=0.;for(int i=0;i<5;i++){s+=a*n2(p);p=p*2.03+7.1;a*=.5;}return s;}
-vec3 sky(vec3 rd,bool cl){
-float se=S.y,day=smoothstep(-.14,.22,se),nt=1.-smoothstep(-.22,-.02,se),y=clamp(rd.y,0.,1.);
-vec3 zen=mix(vec3(.01,.015,.05),vec3(.14,.32,.62),day),hor=mix(vec3(.03,.05,.11),vec3(.66,.77,.9),day);
-vec3 c=mix(hor,zen,pow(y,.42));
-float tw=exp(-abs(se+.04)*7.),az=max(dot(normalize(S.xz+1e-4),normalize(rd.xz+1e-4)),0.);
-c+=vec3(1.,.48,.18)*tw*(.25+1.1*pow(az,3.))*exp(-y*3.5)*.9;
-c=mix(c,c*vec3(1.1,.95,.8)+vec3(.12,.05,.0),W*.5*exp(-y*4.));
-float sd=dot(rd,S),sv=smoothstep(-.06,-.01,se);
-c+=vec3(1.,.85,.6)*(pow(max(sd,0.),64.)*.25+pow(max(sd,0.),4096.)*2.+smoothstep(.9996,.9999,sd)*3.)*sv;
-vec3 g=rd*90.,fl=floor(g);float st=step(.975,h3(fl))*smoothstep(.2,0.,length(fract(g)-.5))*(.6+.4*sin(T*2.+h3(fl)*40.));
-c+=vec3(.9,.95,1.)*st*nt*smoothstep(-.02,.15,rd.y);
-vec3 nm=normalize(vec3(.35,.75,.55));float q=dot(rd,nm)*4.5,mw=exp(-q*q)*(.5+.8*fbm(rd.xz*4.+rd.y*3.));
-c+=vec3(.25,.28,.45)*mw*.35*nt*smoothstep(0.,.2,rd.y);
-float md=dot(rd,M);
-if(md>.985&&M.y>-.05){vec3 t1=normalize(cross(vec3(0.,1.,0.),M)),t2=cross(M,t1);vec2 m=vec2(dot(rd,t1),dot(rd,t2))/.045;float r=length(m);
-if(r<1.){float e=(1.-2.*P.z)*sqrt(1.-m.y*m.y),lit=smoothstep(e-.06,e+.06,m.x*P.w);vec3 mc=mix(vec3(.04,.05,.08),vec3(.95,.93,.85),lit)*(.85+.15*n2(m*8.));c=mix(c,mc,smoothstep(1.,.92,r));}
-c+=vec3(.5,.6,.8)*pow(max(md,0.),300.)*.3*P.z;}
-if(cl&&rd.y>0.){vec2 p=rd.xz/(rd.y+.2)*1.3+vec2(T*.012,T*.004);float f=fbm(p),cv=smoothstep(.5,.78,f)*smoothstep(0.,.12,rd.y);
-vec3 cc=mix(vec3(.08,.1,.16),vec3(.95,.96,1.),day);cc=mix(cc,vec3(1.,.55,.3),tw*.7*az);cc*=.55+.45*smoothstep(.45,.7,fbm(p*1.9+3.));c=mix(c,cc,cv*.85);}
-return c;}
-void main(){vec2 uv=(gl_FragCoord.xy-.5*R)/R.y;
-vec3 f=vec3(sin(P.x)*cos(P.y),sin(P.y),cos(P.x)*cos(P.y)),r=vec3(cos(P.x),0.,-sin(P.x)),u=cross(f,r),rd=normalize(r*uv.x+u*uv.y+f*1.15),col;
-if(rd.y>-.002)col=sky(rd,true);else{
-float t=1.7/-rd.y;vec2 q=(vec3(0.,1.7,0.)+rd*t).xz;float dx=0.,dz=0.;
-for(int i=0;i<5;i++){float fi=float(i);vec2 d=vec2(sin(fi*1.7+.6),cos(fi*2.3+.2));float k=.6+fi*.55,a=.5/(k*k+1.),ph=dot(d,q)*k+T*(.7+fi*.25);dx+=d.x*k*a*cos(ph);dz+=d.y*k*a*cos(ph);}
-float at=exp(-t*.028);vec3 n=normalize(vec3(-dx*at*1.2,1.,-dz*at*1.2)),rf=reflect(rd,n);rf.y=abs(rf.y);
-float fr=.02+.98*pow(1.-max(dot(n,-rd),0.),5.);vec3 deep=mix(vec3(.004,.012,.03),vec3(.02,.09,.16),smoothstep(-.14,.22,S.y));
-col=mix(deep,sky(rf,false),fr);
-col+=vec3(1.,.8,.55)*pow(max(dot(rf,S),0.),300.)*1.5*smoothstep(-.05,.1,S.y);
-col+=vec3(.7,.8,1.)*pow(max(dot(rf,M),0.),600.)*P.z*step(0.,M.y)*1.2;
-col=mix(col,sky(normalize(vec3(rd.x,.0,rd.z)),false),1.-exp(-t*.02));}
-col=1.-exp(-col*1.15);col*=1.-.28*dot(uv*vec2(.9,1.),uv*vec2(.9,1.));
-gl_FragColor=vec4(col,1.);}`;
-const GLS={raf:0,cv:null,gl:null,sc:.75,fail:0,deg:0,last:0,fa:[],yaw:Math.PI,ty:0,tp:0,cy:0,cp:0,pos:null,pt:0,idle:Date.now(),warm:0,bat:null};
 function geo(){return S.geo||{lat:44,lon:14.5}}
 function astro(){const g=geo(),r=Math.PI/180,d=Date.now()/864e5-10957.5,la=g.lat*r,
 pos=(ra,de)=>{const H=(280.46061837+360.98564736629*d+g.lon)*r-ra;return{al:Math.asin(Math.sin(la)*Math.sin(de)+Math.cos(la)*Math.cos(de)*Math.cos(H)),az:Math.atan2(Math.sin(H),Math.cos(H)*Math.sin(la)-Math.tan(de)*Math.cos(la))+Math.PI}},
@@ -756,6 +756,6 @@ function hdrH(){const h=document.querySelector('header');if(h)document.documentE
 addEventListener('resize',hdrH);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(hdrH);
 function kbFix(){const a=document.activeElement;if(!a||!a.matches('input:not([type=checkbox]),textarea'))document.body.classList.remove('kb')};
 document.addEventListener('pointerdown',()=>setTimeout(kbFix,150),true);
-if(visualViewport)visualViewport.addEventListener('resize',()=>setTimeout(kbFix,200));
+if(window.visualViewport)visualViewport.addEventListener('resize',()=>setTimeout(kbFix,200));
 if(FAM){R=function(){};document.documentElement.classList.remove('locked');document.body.innerHTML='<div style="height:100%;overflow-y:auto">'+famView()+'</div>'}
 </script></body></html>
