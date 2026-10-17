@@ -187,7 +187,7 @@ header.sm .hs{opacity:0}
 #v{padding-top:var(--hh,78px)}
 ::view-transition-group(hdr),::view-transition-new(hdr){animation:none}::view-transition-old(hdr){display:none}
 #scene{display:none;position:absolute;inset:0;z-index:0;pointer-events:none;transition:opacity .5s}html.deck:not(.light) #scene{display:block}
-#scene svg{display:block;position:absolute;inset:0}
+#scene svg,#scene canvas{display:block;position:absolute;inset:0}#scene canvas{width:100%;height:100%}
 #scene .ov{position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 40%,transparent 45%,rgba(0,0,0,.4) 100%),color-mix(in srgb,var(--bg) 38%,transparent)}
 #scene .p1{transform:translateX(calc(var(--px,0)*.35px))}#scene .p2{transform:translateX(calc(var(--px,0)*.8px))}#scene .p3{transform:translateX(calc(var(--px,0)*1.4px))}
 #scene.dim{opacity:.35}#scene.dim *{animation-play-state:paused}#scene.still *{animation:none!important}
@@ -305,12 +305,14 @@ function menu(){sheet(`<div style="display:grid;grid-template-columns:repeat(5,1
 $('#mn').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
 document.addEventListener('focusin',e=>{if(e.target.matches('input:not([type=checkbox]),textarea')&&!e.target.closest('dialog'))document.body.classList.add('kb')});
 document.addEventListener('focusout',()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches('input:not([type=checkbox]),textarea'))document.body.classList.remove('kb')},120));
-const VER=33;
+const VER=34;
 const MON=['Siječanj','Veljača','Ožujak','Travanj','Svibanj','Lipanj','Srpanj','Kolovoz','Rujan','Listopad','Studeni','Prosinac'],WD=['Pon','Uto','Sri','Čet','Pet','Sub','Ned'];
 const rigl=()=>RIG.replace(/#0b121d/g,'#4a5f82');
 function empty(t,u){return`<div style="text-align:center;padding:36px 20px;color:var(--mu)"><svg viewBox="0 0 120 70" width=120 style="opacity:.85"><circle cx=60 cy=28 r=12 fill="var(--ac)" opacity=.55 /><rect y=44 width=120 height=26 fill="#2a4468" opacity=.5 rx=6 /><g transform="translate(60 48) scale(.9)">${rigl()}</g></svg><div style="color:var(--tx);font-weight:600;margin-top:10px">${t}</div><div style="font-size:13px;margin-top:4px">${u||''}</div></div>`}
 function welcome(){return`<div class=glass style="margin:18px 20px;padding:26px 22px;text-align:center"><svg viewBox="0 0 160 110" width=170 style="display:block;margin:0 auto 14px"><circle cx=80 cy=42 r=26 fill="url(#wg)" /><circle cx=80 cy=44 r=13 fill="#ffeab0" /><defs><radialGradient id=wg><stop offset=0 stop-color="var(--ac)" stop-opacity=".8" /><stop offset=1 stop-color="var(--ac)" stop-opacity="0" /></radialGradient></defs><rect y=76 width=160 height=34 fill="#2a4468" opacity=".55" rx=8 /><g transform="translate(80 84) scale(.95)">${rigl()}</g></svg><div style="font-size:22px;font-weight:600">Dobrodošao</div><div style="color:var(--mu);margin:8px 0 18px;line-height:1.5">Dodaj zadnju turu, a aplikacija izračuna odbrojavanje, dane plovidbe i zaradu.</div><button class=btn style="background:var(--ac);color:#000;border-color:var(--ac)" onclick="ed('sea',-1)">Dodaj prvu turu</button> <button class=btn onclick="$('#fi').click()">Uvezi kopiju</button></div>`}
-function skyAt(){const d=new Date(),h=d.getHours()+d.getMinutes()/60,K=[[0,'#0f1624','#1b2742','#3a4a70',1],[5,'#141c2b','#2a3050','#6a4a62',.7],[7,'#1f3552','#3a5f8a','#d28f52',.15],[12,'#24466f','#3f6fa0','#8fb0d0',0],[17,'#24406a','#4a5c8c','#d28f52',.1],[19.5,'#1a2040','#4a3a62','#e0894e',.5],[22,'#121a2a','#202c4a','#4a5a80',.9],[24,'#0f1624','#1b2742','#3a4a70',1]];let i=1;while(i<K.length-1&&K[i][0]<h)i++;const a=K[i-1],b=K[i],t=(h-a[0])/(b[0]-a[0]);return{top:lerp(a[1],b[1],t),mid:lerp(a[2],b[2],t),hz:lerp(a[3],b[3],t),st:a[4]+(b[4]-a[4])*t}}
+function skyAt(){const a=astro(),al=a.sa*180/Math.PI,tb=a.sz<Math.PI?[[-18,4.5],[-12,5.5],[-6,6.5],[0,7.2],[6,8],[25,11]]:[[25,13],[15,16.5],[3,18.3],[0,19],[-6,19.8],[-12,21],[-18,22.6]],asc=tb[1][0]>tb[0][0];let h=tb[tb.length-1][1];
+if(asc?al<=tb[0][0]:al>=tb[0][0])h=tb[0][1];else for(let i=0;i<tb.length-1;i++){const a0=tb[i][0],a1=tb[i+1][0];if(asc?al<=a1:al>=a1){h=tb[i][1]+(tb[i+1][1]-tb[i][1])*(al-a0)/(a1-a0);break}}
+const K=[[0,'#0f1624','#1b2742','#3a4a70',1],[5,'#141c2b','#2a3050','#6a4a62',.7],[7,'#1f3552','#3a5f8a','#d28f52',.15],[12,'#24466f','#3f6fa0','#8fb0d0',0],[17,'#24406a','#4a5c8c','#d28f52',.1],[19.5,'#1a2040','#4a3a62','#e0894e',.5],[22,'#121a2a','#202c4a','#4a5a80',.9],[24,'#0f1624','#1b2742','#3a4a70',1]];let i=1;while(i<K.length-1&&K[i][0]<h)i++;const p=K[i-1],q=K[i],t=(h-p[0])/(q[0]-p[0]);return{top:lerp(p[1],q[1],t),mid:lerp(p[2],q[2],t),hz:lerp(p[3],q[3],t),st:p[4]+(q[4]-p[4])*t}}
 const EYE='M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM12 15a3 3 0 100-6 3 3 0 000 6z',EYE0='M3 3l18 18M10.6 6.2A9.8 9.8 0 0112 6c6 0 10 6 10 6a17 17 0 01-3.2 3.9M6.1 7.7C3.7 9.4 2 12 2 12s4 7 10 7a9 9 0 004-1';
 /* ---- kalendar i važni datumi ---- */
 function tl(){const a=S.sea.map(c=>{const f=pd(c.from);return{f,e:c.to?pd(c.to):f+S.rot*D,k:'e',c}});if(!a.length)return a;let b=Math.max(...a.map(x=>x.e))+S.rot*D;const lim=T+550*D;while(b<lim){const e=b+S.rot*D;if(e>=T)a.push({f:b,e,k:'s'});b=e+S.rot*D}return a}
@@ -610,7 +612,7 @@ function payFields(){const p=PM(),f=(l,k)=>`<label>${l}<input type=number inputm
 V.set=()=>{const ch=(arr,cur,fn)=>`<div class=chips>${arr.map(([v,l])=>`<button class="${cur==v?'on':''}" onclick="${fn}('${v}')">${l}</button>`).join('')}</div>`,lb=t=>`<div class=lbl style="margin:16px 0 8px">${t}</div>`,B=bakList(),nt=S.theme||{},bg=SCN[nt.sc||(nt.bg=='light'?'svijetla':nt.bg=='amoled'?'amoled':'ocean')],pm=PM();
 return sgs('rot','Rotacija i plaća',S.rot+'/'+S.rot+(pm.d>0?' · plaća računata':''),`<div style="color:var(--mu);font-size:13px;margin:14px 0 8px">Koliko dana si na brodu, toliko si i kod kuće</div>${[[14,'14/14'],[21,'21/21'],[28,'28/28'],[35,'35/35']].reduce((h,[v,l])=>h+`<button class="btn" style="margin:0 6px 6px 0;${S.rot==v?'border-color:var(--ac);color:var(--ac)':''}" onclick="setRot(${v})">${l}</button>`,'')}<label>Ili upiši broj dana<input type=number inputmode=numeric value="${S.rot}" onchange="setRot(+this.value)"></label><label>Dani putovanja po turi<input type=number inputmode=numeric value="${S.trv}" onchange="S.trv=+this.value||0;save()"></label>${payFields()}`)
 +sgs('tax','Porez',S.thr+' dana',`<label style="margin-top:14px">Godišnji prag dana plovidbe (provjeri s knjigovođom)<input type=number inputmode=numeric value="${S.thr}" onchange="S.thr=+this.value||1;save()"></label>`)
-+sgs('look','Izgled',(S.look=='deck'?'Put kući':'Klasično')+' · '+bg,`${lb('Izgled')}${ch([['deck','Put kući'],['classic','Klasično']],S.look=='deck'?'deck':'classic','setLook')}${lb('Boje')}${schemes(nt)}${lb('Noćni način (crveni)')}${ch([['off','Ručno (gumb s mjesecom)'],['auto','Automatski']],nt.auto?'auto':'off','setNm')}${lb('Noćni način (crveni): od – do sata')}<div style="display:flex;gap:8px"><input type=number min=0 max=23 value="${nt.ns??22}" onchange="setNH('ns',this.value)"><input type=number min=0 max=23 value="${nt.ne??6}" onchange="setNH('ne',this.value)"></div>`)
++sgs('look','Izgled',(S.look=='deck'?'Put kući':'Klasično')+' · '+bg,`${lb('Izgled')}${ch([['deck','Put kući'],['classic','Klasično']],S.look=='deck'?'deck':'classic','setLook')}${lb('Boje')}${schemes(nt)}${lb('Kvaliteta scene')}${ch([['auto','Auto'],['full','Puna ljepota'],['eco','Štedljivo']],S.q||'auto','setQ')}${lb('Položaj riga (za sunce i mjesec)')}<div style="display:flex;gap:8px"><input type=number step=any value="${geo().lat}" onchange="setGeo('lat',this.value)"><input type=number step=any value="${geo().lon}" onchange="setGeo('lon',this.value)"></div><button class=btn style="width:100%;margin-top:8px" onclick="gpsGeo()">Koristi GPS</button>${lb('Noćni način (crveni)')}${ch([['off','Ručno (gumb s mjesecom)'],['auto','Automatski']],nt.auto?'auto':'off','setNm')}${lb('Noćni način (crveni): od – do sata')}<div style="display:flex;gap:8px"><input type=number min=0 max=23 value="${nt.ns??22}" onchange="setNH('ns',this.value)"><input type=number min=0 max=23 value="${nt.ne??6}" onchange="setNH('ne',this.value)"></div>`)
 +sgs('sec','Sigurnost',S.lock?(S.lock.t=='pin'?'PIN':'Otisak prsta'):'Isključeno',`<label style="margin-top:14px">Zaključavanje aplikacije<select onchange="setLock(this.value)"><option value=off ${!S.lock?'selected':''}>Isključeno</option><option value=pin ${S.lock&&S.lock.t=='pin'?'selected':''}>PIN</option><option value=bio ${S.lock&&S.lock.t=='bio'?'selected':''}>Otisak prsta / zaključavanje uređaja</option></select></label><p style="color:var(--mu);font-size:12px">Štiti pristup aplikaciji; podaci u kopiji nisu šifrirani. Oko u zaglavlju sakriva iznose.</p>`)
 +sgs('dat','Podaci i kopije',S.lb?'kopija '+fd(S.lb).slice(0,5)+'.':'bez kopije',`<div class=chips style="margin-top:14px"><button onclick="shareBk()">Spremi / podijeli kopiju</button><button onclick="$('#fi').click()">Uvezi kopiju</button></div>${lb('Automatske kopije (zadnjih 5 dana)')}${B.length?B.map((x,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--ln);min-height:56px"><span>${fd(x.d)}<small style="display:block;color:var(--mu);font-size:12px">${Math.round(x.s.length/1024)} KB</small></span><button class=btn onclick="restoreBak(${i})">Povrati</button></div>`).join(''):'<p style="color:var(--mu)">Prva kopija nastaje pri idućem otvaranju.</p>'}${lb('Opasna zona')}<button class=btn style="width:100%;color:var(--red);border-color:var(--red)" onclick="resetAll()">Obriši sve i kreni ispočetka</button>`)
 }
@@ -638,13 +640,89 @@ hl=on&&rem<=1?[-34,-26,26,34].map((d,i)=>`<circle cx="${hx+d}" cy="${yH+2}" r="1
 ex=[...S.certs,...S.docs].filter(q=>q.exp).sort((a,b)=>a.exp.localeCompare(b.exp))[0],est=on?payEst(curTour()):0,
 row=(l,x)=>`<div class=row><div>${l}</div><div class=r>${x}</div></div>`;
 return`<div style="text-align:center;padding:14px 20px 0"><div class=lbl>${rem<0?'PREKORAČENO':v.lab}</div><div class="cu num" data-v="${Math.abs(rem)}" style="font-size:84px;font-weight:600;line-height:1.02;letter-spacing:-.03em;text-shadow:0 2px 24px rgba(0,0,0,.35)">${Math.abs(rem)}</div><div style="color:var(--mu);margin-top:2px">${v.sub}</div><div style="margin-top:10px"><span class=pill>${heroMsg({m:on?'on':'home',rem,p:pc})}</span></div></div><div onclick="go('cal')" style="padding:14px 8px 0"><svg viewBox="0 0 360 120" width="100%" role="img" aria-label="Put kući"><defs><radialGradient id=hg><stop offset=0 stop-color="#ffd98a" stop-opacity=".9"/><stop offset=1 stop-color="#ffd98a" stop-opacity="0"/></radialGradient></defs><rect y="${yH}" width="360" height="36" fill="#0b1422" opacity=".55"/><line x1="${LX}" y1="${yH+4}" x2="${bx.toFixed(1)}" y2="${yH+4}" stroke="var(--ac)" stroke-width="1.4" stroke-dasharray="2 4" opacity=".85"/><line x1="${bx.toFixed(1)}" y1="${yH+4}" x2="${RX}" y2="${yH+4}" stroke="var(--mu)" stroke-width="1.2" stroke-dasharray="2 5" opacity=".35"/>${mound(hx)}<circle cx="${hx}" cy="${yH-26}" r="34" fill="url(#hg)" opacity="${g.toFixed(2)}"/><g transform="translate(${hx} ${yH-18})">${HOUSE}</g><g transform="translate(${rx} ${yH})">${vsl()}</g>${hl}<g transform="translate(${bx.toFixed(1)} ${yH+1})"><path d="M-9 0h18l-4 5h-10zM0 -1V-13l8 9H0z" fill="#eef3fb"/></g></svg></div><div class=card2 style="margin:10px 20px 0;padding:4px 16px">${row('Procjena isplate',est>0?(S.hide?'•••':n2(Math.round(est))+' '+S.cur):'—')}${row('Najbliži rok',ex?esc(ex.n)+'<small>'+fd(ex.exp)+' · '+exl(ex)+'</small>':'—')}</div>`}
-function sceneDraw(){if(S.look!='deck')return;const a=$('#app');if(!a)return;let e=$('#scene');if(!e){e=document.createElement('div');e.id='scene';e.setAttribute('aria-hidden','true');a.insertBefore(e,a.firstChild)}
+function sceneSvg(){if(S.look!='deck')return;const a=$('#app');if(!a)return;let e=$('#scene');if(!e){e=document.createElement('div');e.id='scene';e.setAttribute('aria-hidden','true');a.insertBefore(e,a.firstChild)}
 const d=new Date(),h=d.getHours()+d.getMinutes()/60,v=voy(),warm=v&&v.on?Math.max(0,(v.pc-.5)*2):0,key=Math.round(h*4)+'|'+warm.toFixed(1);e.classList.toggle('dim',S.tab!='home');e.classList.toggle('still',RM);if(e.dataset.k===key)return;e.dataset.k=key;
 const sk=skyAt(),hz=lerp(sk.hz,'#e0894e',.45*warm),r=i=>{const x=Math.sin(i*127.1)*43758.5;return x-Math.floor(x)};let st='';
 for(let i=0;i<44;i++)st+=`<circle cx="${(r(i)*390).toFixed(0)}" cy="${(r(i+99)*430).toFixed(0)}" r="${(.6+r(i+7)*1.1).toFixed(1)}" fill="#fff" opacity="${((.35+r(i+3)*.5)*sk.st).toFixed(2)}"${i%4==0?` class=tw style="animation-delay:${(i%7)*.6}s"`:''}/>`;
 const cl=[[50,120,.9],[250,200,.7],[340,90,1.1],[150,300,.6]].map(([x,y,s],i)=>`<g class="cld c${i%3}"><g transform="translate(${x} ${y}) scale(${s})" fill="#fff" opacity="${(.04+.16*(1-sk.st)).toFixed(2)}"><ellipse rx="26" ry="7"/><ellipse cx="14" cy="-6" rx="16" ry="8"/><ellipse cx="-12" cy="-4" rx="14" ry="6"/></g></g>`).join(''),
 wv=[[560,.4],[600,.3],[650,.22],[710,.16],[780,.1]].map(([y,o],i)=>`<g class="wv w${i%4}"><path d="M0 ${y}q16 -5 32 0${'t32 0'.repeat(14)}" fill="none" stroke="#5b7fb0" stroke-width="1.2" opacity="${o}"/></g>`).join('');
 e.innerHTML=`<svg viewBox="0 0 390 800" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><defs><linearGradient id=sg x1=0 y1=0 x2=0 y2=1><stop offset="0" stop-color="${sk.top}"/><stop offset=".45" stop-color="${sk.mid}"/><stop offset=".7" stop-color="${hz}"/></linearGradient><linearGradient id=sa x1=0 y1=0 x2=0 y2=1><stop offset="0" stop-color="${lerp(hz,'#1b2c47',.7)}"/><stop offset="1" stop-color="#08101c"/></linearGradient></defs><rect width="390" height="570" fill="url(#sg)"/><rect y="560" width="390" height="240" fill="url(#sa)"/><g class="p1">${st}</g>${moonSvg(sk.st)}<g class="p2">${cl}</g><g class="p3">${wv}</g></svg><div class="ov"></div>`}
+const GLV='attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}',GLF=`
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+uniform vec2 R;uniform float T,W;uniform vec3 S,M;uniform vec4 P;
+float h1(float n){return fract(sin(n)*43758.5453);}
+float h3(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
+float n2(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);float a=h1(i.x+i.y*57.),b=h1(i.x+1.+i.y*57.),c=h1(i.x+(i.y+1.)*57.),d=h1(i.x+1.+(i.y+1.)*57.);return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}
+float fbm(vec2 p){float a=.5,s=0.;for(int i=0;i<5;i++){s+=a*n2(p);p=p*2.03+7.1;a*=.5;}return s;}
+vec3 sky(vec3 rd,bool cl){
+float se=S.y,day=smoothstep(-.14,.22,se),nt=1.-smoothstep(-.22,-.02,se),y=clamp(rd.y,0.,1.);
+vec3 zen=mix(vec3(.01,.015,.05),vec3(.14,.32,.62),day),hor=mix(vec3(.03,.05,.11),vec3(.66,.77,.9),day);
+vec3 c=mix(hor,zen,pow(y,.42));
+float tw=exp(-abs(se+.04)*7.),az=max(dot(normalize(S.xz+1e-4),normalize(rd.xz+1e-4)),0.);
+c+=vec3(1.,.48,.18)*tw*(.25+1.1*pow(az,3.))*exp(-y*3.5)*.9;
+c=mix(c,c*vec3(1.1,.95,.8)+vec3(.12,.05,.0),W*.5*exp(-y*4.));
+float sd=dot(rd,S),sv=smoothstep(-.06,-.01,se);
+c+=vec3(1.,.85,.6)*(pow(max(sd,0.),64.)*.25+pow(max(sd,0.),4096.)*2.+smoothstep(.9996,.9999,sd)*3.)*sv;
+vec3 g=rd*90.,fl=floor(g);float st=step(.975,h3(fl))*smoothstep(.2,0.,length(fract(g)-.5))*(.6+.4*sin(T*2.+h3(fl)*40.));
+c+=vec3(.9,.95,1.)*st*nt*smoothstep(-.02,.15,rd.y);
+vec3 nm=normalize(vec3(.35,.75,.55));float q=dot(rd,nm)*4.5,mw=exp(-q*q)*(.5+.8*fbm(rd.xz*4.+rd.y*3.));
+c+=vec3(.25,.28,.45)*mw*.35*nt*smoothstep(0.,.2,rd.y);
+float md=dot(rd,M);
+if(md>.985&&M.y>-.05){vec3 t1=normalize(cross(vec3(0.,1.,0.),M)),t2=cross(M,t1);vec2 m=vec2(dot(rd,t1),dot(rd,t2))/.045;float r=length(m);
+if(r<1.){float e=(1.-2.*P.z)*sqrt(1.-m.y*m.y),lit=smoothstep(e-.06,e+.06,m.x*P.w);vec3 mc=mix(vec3(.04,.05,.08),vec3(.95,.93,.85),lit)*(.85+.15*n2(m*8.));c=mix(c,mc,smoothstep(1.,.92,r));}
+c+=vec3(.5,.6,.8)*pow(max(md,0.),300.)*.3*P.z;}
+if(cl&&rd.y>0.){vec2 p=rd.xz/(rd.y+.2)*1.3+vec2(T*.012,T*.004);float f=fbm(p),cv=smoothstep(.5,.78,f)*smoothstep(0.,.12,rd.y);
+vec3 cc=mix(vec3(.08,.1,.16),vec3(.95,.96,1.),day);cc=mix(cc,vec3(1.,.55,.3),tw*.7*az);cc*=.55+.45*smoothstep(.45,.7,fbm(p*1.9+3.));c=mix(c,cc,cv*.85);}
+return c;}
+void main(){vec2 uv=(gl_FragCoord.xy-.5*R)/R.y;
+vec3 f=vec3(sin(P.x)*cos(P.y),sin(P.y),cos(P.x)*cos(P.y)),r=vec3(cos(P.x),0.,-sin(P.x)),u=cross(f,r),rd=normalize(r*uv.x+u*uv.y+f*1.15),col;
+if(rd.y>-.002)col=sky(rd,true);else{
+float t=1.7/-rd.y;vec2 q=(vec3(0.,1.7,0.)+rd*t).xz;float dx=0.,dz=0.;
+for(int i=0;i<5;i++){float fi=float(i);vec2 d=vec2(sin(fi*1.7+.6),cos(fi*2.3+.2));float k=.6+fi*.55,a=.5/(k*k+1.),ph=dot(d,q)*k+T*(.7+fi*.25);dx+=d.x*k*a*cos(ph);dz+=d.y*k*a*cos(ph);}
+float at=exp(-t*.028);vec3 n=normalize(vec3(-dx*at*1.2,1.,-dz*at*1.2)),rf=reflect(rd,n);rf.y=abs(rf.y);
+float fr=.02+.98*pow(1.-max(dot(n,-rd),0.),5.);vec3 deep=mix(vec3(.004,.012,.03),vec3(.02,.09,.16),smoothstep(-.14,.22,S.y));
+col=mix(deep,sky(rf,false),fr);
+col+=vec3(1.,.8,.55)*pow(max(dot(rf,S),0.),300.)*1.5*smoothstep(-.05,.1,S.y);
+col+=vec3(.7,.8,1.)*pow(max(dot(rf,M),0.),600.)*P.z*step(0.,M.y)*1.2;
+col=mix(col,sky(normalize(vec3(rd.x,.0,rd.z)),false),1.-exp(-t*.02));}
+col=1.-exp(-col*1.15);col*=1.-.28*dot(uv*vec2(.9,1.),uv*vec2(.9,1.));
+gl_FragColor=vec4(col,1.);}`;
+const GLS={raf:0,cv:null,gl:null,sc:.75,fail:0,deg:0,last:0,fa:[],yaw:Math.PI,ty:0,tp:0,cy:0,cp:0,pos:null,pt:0,idle:Date.now(),warm:0,bat:null};
+function geo(){return S.geo||{lat:44,lon:14.5}}
+function astro(){const g=geo(),r=Math.PI/180,d=Date.now()/864e5-10957.5,la=g.lat*r,
+pos=(ra,de)=>{const H=(280.46061837+360.98564736629*d+g.lon)*r-ra;return{al:Math.asin(Math.sin(la)*Math.sin(de)+Math.cos(la)*Math.cos(de)*Math.cos(H)),az:Math.atan2(Math.sin(H),Math.cos(H)*Math.sin(la)-Math.tan(de)*Math.cos(la))+Math.PI}},
+ec=(l,b)=>{const e=(23.439-4e-7*d)*r;return[Math.atan2(Math.sin(l)*Math.cos(e)-Math.tan(b)*Math.sin(e),Math.cos(l)),Math.asin(Math.sin(b)*Math.cos(e)+Math.cos(b)*Math.sin(e)*Math.sin(l))]},
+gs=(357.528+.9856003*d)*r,ls=(280.46+.9856474*d+1.915*Math.sin(gs)+.02*Math.sin(2*gs))*r,Mm=(134.963+13.064993*d)*r,Fm=(93.272+13.22935*d)*r,lm=(218.316+13.176396*d+6.289*Math.sin(Mm))*r,bm=5.128*Math.sin(Fm)*r,
+sp=pos(...ec(ls,0)),mp=pos(...ec(lm,bm)),el=lm-ls,v=p=>[Math.sin(p.az)*Math.cos(p.al),Math.sin(p.al),Math.cos(p.az)*Math.cos(p.al)];
+return{s:v(sp),m:v(mp),k:(1-Math.cos(el))/2,w:Math.sin(el)>=0?1:-1,yaw:sp.al>-.1?sp.az:mp.al>0?mp.az:Math.PI,sa:sp.al,sz:sp.az}}
+function qEff(){const q=S.q||'auto';if(q!='auto')return q;if(GLS.deg>Date.now())return'eco';const b=GLS.bat;return!b||b.charging||b.level>.3?'full':'eco'}
+function glStop(){cancelAnimationFrame(GLS.raf);GLS.raf=0;if(GLS.cv){GLS.cv=null;GLS.gl=null;const e=$('#scene');if(e){e.innerHTML='';e.dataset.k=''}}}
+function glStart(){if(GLS.fail)return 0;let e=$('#scene');if(!e){e=document.createElement('div');e.id='scene';e.setAttribute('aria-hidden','true');$('#app').insertBefore(e,$('#app').firstChild)}
+if(!GLS.cv||!e.contains(GLS.cv)){const c=document.createElement('canvas'),gl=c.getContext('webgl',{antialias:false,alpha:false,powerPreference:'high-performance'});if(!gl){GLS.fail=1;return 0}
+const sh=(t,s)=>{const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(o));return null}return o},v=sh(gl.VERTEX_SHADER,GLV),f=sh(gl.FRAGMENT_SHADER,GLF);if(!v||!f){GLS.fail=1;return 0}
+const p=gl.createProgram();gl.attachShader(p,v);gl.attachShader(p,f);gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS)){GLS.fail=1;return 0}
+gl.useProgram(p);gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);const l=gl.getAttribLocation(p,'a');gl.enableVertexAttribArray(l);gl.vertexAttribPointer(l,2,gl.FLOAT,false,0,0);
+GLS.u={};['R','T','S','M','P','W'].forEach(n=>GLS.u[n]=gl.getUniformLocation(p,n));GLS.gl=gl;GLS.cv=c;c.addEventListener('webglcontextlost',ev=>{ev.preventDefault();GLS.fail=1;glStop();sceneDraw()});
+e.innerHTML='';e.appendChild(c);const ov=document.createElement('div');ov.className='ov';e.appendChild(ov);e.dataset.k='gl'}
+e.classList.toggle('dim',S.tab!='home');const v=voy();GLS.warm=v&&v.on?Math.max(0,(v.pc-.5)*2):0;if(!GLS.raf)GLS.raf=requestAnimationFrame(glFrame);return 1}
+function glFrame(t){GLS.raf=0;const gl=GLS.gl;if(!gl||document.hidden||S.tab!='home')return;
+const iv=RM?1000:Date.now()-GLS.idle>3e5?50:0;if(iv&&t-GLS.last<iv){GLS.raf=requestAnimationFrame(glFrame);return}
+const dt=t-GLS.last;GLS.last=t;if(!iv&&dt<100){GLS.fa.push(dt);if(GLS.fa.length>=90){const a=GLS.fa.reduce((x,y)=>x+y)/90;GLS.fa=[];if(a>28){if(GLS.sc>.5)GLS.sc*=.75;else{GLS.deg=Date.now()+9e5;sceneDraw();return}}}}
+const c=GLS.cv,d=Math.min(devicePixelRatio||1,2)*GLS.sc,w=Math.round(c.clientWidth*d),h=Math.round(c.clientHeight*d);if(c.width!=w||c.height!=h){c.width=w;c.height=h;gl.viewport(0,0,w,h)}
+if(!GLS.pos||t-GLS.pt>2000){GLS.pt=t;GLS.pos=astro()}const A=GLS.pos;GLS.yaw+=Math.atan2(Math.sin(A.yaw-GLS.yaw),Math.cos(A.yaw-GLS.yaw))*.02;GLS.cy+=(GLS.ty-GLS.cy)*.12;GLS.cp+=(GLS.tp-GLS.cp)*.12;
+const u=GLS.u;gl.uniform2f(u.R,w,h);gl.uniform1f(u.T,RM?0:t/1000);gl.uniform3fv(u.S,A.s);gl.uniform3fv(u.M,A.m);gl.uniform4f(u.P,GLS.yaw+GLS.cy*Math.PI/180,(10+GLS.cp)*Math.PI/180,A.k,A.w);gl.uniform1f(u.W,GLS.warm);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);GLS.raf=requestAnimationFrame(glFrame)}
+function sceneDraw(){if(S.look!='deck'){glStop();return}if(qEff()=='full'&&glStart())return;glStop();sceneSvg()}
+function setQ(v){S.q=v;save();GLS.deg=0;GLS.fail=0;GLS.sc=.75;sceneDraw();R()}
+function setGeo(k,v){S.geo=Object.assign({},geo(),{[k]:+v||0});save();GLS.pos=null}
+function gpsGeo(){navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>{S.geo={lat:+p.coords.latitude.toFixed(3),lon:+p.coords.longitude.toFixed(3)};save();GLS.pos=null;toast('Položaj spremljen');R()},()=>toast('GPS nije dostupan'),{timeout:15000}):toast('GPS nije dostupan')}
+if(navigator.getBattery)navigator.getBattery().then(b=>{GLS.bat=b;['chargingchange','levelchange'].forEach(e=>b.addEventListener(e,()=>sceneDraw()))}).catch(()=>{});
+addEventListener('deviceorientation',e=>{if(e.gamma==null||RM)return;GLS.ty=Math.max(-35,Math.min(35,e.gamma*.6));GLS.tp=Math.max(-8,Math.min(30,(e.beta-60)*.35))},{passive:true});
+addEventListener('pointerdown',()=>GLS.idle=Date.now(),true);document.addEventListener('scroll',()=>GLS.idle=Date.now(),{capture:true,passive:true});document.addEventListener('visibilitychange',()=>{if(!document.hidden)sceneDraw()});
+
 setInterval(()=>{if(!document.hidden)sceneDraw()},300000);
 
 
