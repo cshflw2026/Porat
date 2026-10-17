@@ -305,7 +305,7 @@ function menu(){sheet(`<div style="display:grid;grid-template-columns:repeat(5,1
 $('#mn').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
 document.addEventListener('focusin',e=>{if(e.target.matches('input:not([type=checkbox]),textarea')&&!e.target.closest('dialog'))document.body.classList.add('kb')});
 document.addEventListener('focusout',()=>setTimeout(()=>{if(!document.activeElement||!document.activeElement.matches('input:not([type=checkbox]),textarea'))document.body.classList.remove('kb')},120));
-const VER=35;
+const VER=36;
 const MON=['Siječanj','Veljača','Ožujak','Travanj','Svibanj','Lipanj','Srpanj','Kolovoz','Rujan','Listopad','Studeni','Prosinac'],WD=['Pon','Uto','Sri','Čet','Pet','Sub','Ned'];
 const rigl=()=>RIG.replace(/#0b121d/g,'#4a5f82');
 function empty(t,u){return`<div style="text-align:center;padding:36px 20px;color:var(--mu)"><svg viewBox="0 0 120 70" width=120 style="opacity:.85"><circle cx=60 cy=28 r=12 fill="var(--ac)" opacity=.55 /><rect y=44 width=120 height=26 fill="#2a4468" opacity=.5 rx=6 /><g transform="translate(60 48) scale(.9)">${rigl()}</g></svg><div style="color:var(--tx);font-weight:600;margin-top:10px">${t}</div><div style="font-size:13px;margin-top:4px">${u||''}</div></div>`}
@@ -579,13 +579,13 @@ c+=vec3(1.,.48,.18)*tw*(.25+1.1*pow(az,3.))*exp(-y*3.5)*.9;
 c=mix(c,c*vec3(1.1,.95,.8)+vec3(.12,.05,.0),W*.5*exp(-y*4.));
 float sd=dot(rd,S),sv=smoothstep(-.06,-.01,se);
 c+=vec3(1.,.85,.6)*(pow(max(sd,0.),64.)*.25+pow(max(sd,0.),4096.)*2.+smoothstep(.9996,.9999,sd)*3.)*sv;
-vec3 g=rd*90.,fl=floor(g);float st=step(.975,h3(fl))*smoothstep(.2,0.,length(fract(g)-.5))*(.6+.4*sin(T*2.+h3(fl)*40.));
+vec3 g=rd*90.,fl=floor(g);float st=step(.975,h3(fl))*(1.-smoothstep(0.,.2,length(fract(g)-.5)))*(.6+.4*sin(T*2.+h3(fl)*40.));
 c+=vec3(.9,.95,1.)*st*nt*smoothstep(-.02,.15,rd.y);
 vec3 nm=normalize(vec3(.35,.75,.55));float q=dot(rd,nm)*4.5,mw=exp(-q*q)*(.5+.8*fbm(rd.xz*4.+rd.y*3.));
 c+=vec3(.25,.28,.45)*mw*.35*nt*smoothstep(0.,.2,rd.y);
 float md=dot(rd,M);
 if(md>.985&&M.y>-.05){vec3 t1=normalize(cross(vec3(0.,1.,0.),M)),t2=cross(M,t1);vec2 m=vec2(dot(rd,t1),dot(rd,t2))/.045;float r=length(m);
-if(r<1.){float e=(1.-2.*P.z)*sqrt(1.-m.y*m.y),lit=smoothstep(e-.06,e+.06,m.x*P.w);vec3 mc=mix(vec3(.04,.05,.08),vec3(.95,.93,.85),lit)*(.85+.15*n2(m*8.));c=mix(c,mc,smoothstep(1.,.92,r));}
+if(r<1.){float e=(1.-2.*P.z)*sqrt(1.-m.y*m.y),lit=smoothstep(e-.06,e+.06,m.x*P.w);vec3 mc=mix(vec3(.04,.05,.08),vec3(.95,.93,.85),lit)*(.85+.15*n2(m*8.));c=mix(c,mc,(1.-smoothstep(.92,1.,r)));}
 c+=vec3(.5,.6,.8)*pow(max(md,0.),300.)*.3*P.z;}
 if(cl&&rd.y>0.){vec2 p=rd.xz/(rd.y+.2)*1.3+vec2(T*.012,T*.004);float f=fbm(p),cv=smoothstep(.5,.78,f)*smoothstep(0.,.12,rd.y);
 vec3 cc=mix(vec3(.08,.1,.16),vec3(.95,.96,1.),day);cc=mix(cc,vec3(1.,.55,.3),tw*.7*az);cc*=.55+.45*smoothstep(.45,.7,fbm(p*1.9+3.));c=mix(c,cc,cv*.85);}
@@ -757,5 +757,6 @@ addEventListener('resize',hdrH);if(document.fonts&&document.fonts.ready)document
 function kbFix(){const a=document.activeElement;if(!a||!a.matches('input:not([type=checkbox]),textarea'))document.body.classList.remove('kb')};
 document.addEventListener('pointerdown',()=>setTimeout(kbFix,150),true);
 if(window.visualViewport)visualViewport.addEventListener('resize',()=>setTimeout(kbFix,200));
+applyTheme();sceneDraw();
 if(FAM){R=function(){};document.documentElement.classList.remove('locked');document.body.innerHTML='<div style="height:100%;overflow-y:auto">'+famView()+'</div>'}
 </script></body></html>
