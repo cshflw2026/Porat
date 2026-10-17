@@ -1,4 +1,4 @@
-const C='emariner-v37',F=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png','outfit-latin.woff2','outfit-ext.woff2','dmsans-latin.woff2','dmsans-ext.woff2'];
+const C='emariner-v38',F=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png','outfit-latin.woff2','outfit-ext.woff2','dmsans-latin.woff2','dmsans-ext.woff2','cormorant-latin.woff2','cormorant-ext.woff2'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(F.map(u=>new Request(u,{cache:'reload'})))));self.skipWaiting()});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!=C).map(x=>caches.delete(x)))).then(()=>clients.claim())));
 self.addEventListener('fetch',e=>{if(e.request.method!='GET'||new URL(e.request.url).origin!=location.origin)return;e.respondWith(caches.match(e.request,{ignoreSearch:true}).then(r=>{const n=fetch(e.request.url,{cache:'no-cache'}).then(x=>{if(x.ok){const y=x.clone();caches.open(C).then(c=>c.put(e.request,y))}return x}).catch(()=>r);return r||n}))});
